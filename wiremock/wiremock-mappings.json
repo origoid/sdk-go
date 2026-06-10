@@ -1,0 +1,689 @@
+{
+  "mappings": [
+    {
+      "id": "32d18329-2bc5-40db-9d82-69f28e06ab0e",
+      "name": "Generate Bearer Token - Default lifetime",
+      "request": {
+        "urlPathTemplate": "/auth/token",
+        "method": "POST",
+        "headers": {
+          "x-api-key": {
+            "matches": ".+"
+          }
+        }
+      },
+      "response": {
+        "status": 200,
+        "body": "{\n  \"status\": \"OK\",\n  \"type\": \"SUCCESS\",\n  \"message\": \"Token issued\",\n  \"data\": {\n    \"access_token\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjbGllbnRfaWQiOiI...\",\n    \"token_type\": \"Bearer\",\n    \"expires_in\": 3600,\n    \"scope\": \"*\"\n  },\n  \"errors\": [\n    {\n      \"field\": \"field\",\n      \"code\": \"code\",\n      \"message\": \"message\"\n    }\n  ],\n  \"transactionId\": \"3eb33303-3466-4071-872e-067584149666\",\n  \"processedAt\": \"2024-01-15T09:30:00Z\",\n  \"billable\": false\n}",
+        "headers": {
+          "Content-Type": "application/json"
+        }
+      },
+      "uuid": "32d18329-2bc5-40db-9d82-69f28e06ab0e",
+      "persistent": true,
+      "priority": 3,
+      "metadata": {
+        "mocklab": {
+          "created": {
+            "at": "2020-01-01T00:00:00.000Z",
+            "via": "SYSTEM"
+          }
+        }
+      }
+    },
+    {
+      "id": "99e0dc59-7e93-4a0d-8846-92245980ca74",
+      "name": "Validate CURP - Success (Without RFC)",
+      "request": {
+        "urlPathTemplate": "/mex/renapo/v1/curp-validations",
+        "method": "POST",
+        "headers": {
+          "x-api-key": {
+            "matches": ".+"
+          }
+        }
+      },
+      "response": {
+        "status": 200,
+        "body": "{\n  \"status\": \"OK\",\n  \"type\": \"SUCCESS\",\n  \"message\": \"CURP found and validated\",\n  \"data\": {\n    \"personalInfo\": {\n      \"curp\": \"TEST900101HDFRRN09\",\n      \"givenNames\": \"JUAN\",\n      \"firstSurname\": \"PEREZ\",\n      \"secondSurname\": \"LOPEZ\",\n      \"gender\": \"H\",\n      \"dateOfBirth\": \"1990-01-01\",\n      \"birthState\": \"DISTRITO FEDERAL\",\n      \"birthStateCode\": \"DF\",\n      \"nationality\": \"MEXICO\"\n    },\n    \"documentDetails\": {\n      \"curpStatus\": \"AN\",\n      \"probatoryDocumentCode\": 1\n    },\n    \"registrationDetails\": {\n      \"state\": \"DISTRITO FEDERAL\",\n      \"stateCode\": \"09\",\n      \"municipality\": \"CUAUHTEMOC\",\n      \"municipalityCode\": \"015\",\n      \"year\": \"1990\",\n      \"foreignNumber\": \"\"\n    }\n  },\n  \"errors\": [\n    {\n      \"field\": \"field\",\n      \"code\": \"code\",\n      \"message\": \"message\"\n    }\n  ],\n  \"transactionId\": \"550e8400-e29b-41d4-a716-446655440000\",\n  \"processedAt\": \"2024-01-15T09:30:00Z\",\n  \"billable\": true\n}",
+        "headers": {
+          "Content-Type": "application/json"
+        }
+      },
+      "uuid": "99e0dc59-7e93-4a0d-8846-92245980ca74",
+      "persistent": true,
+      "priority": 3,
+      "metadata": {
+        "mocklab": {
+          "created": {
+            "at": "2020-01-01T00:00:00.000Z",
+            "via": "SYSTEM"
+          }
+        }
+      }
+    },
+    {
+      "id": "1d60349d-3a73-428d-9510-46c42e91e5ef",
+      "name": "Retrieve CURP via Demographics - Success (Without RFC)",
+      "request": {
+        "urlPathTemplate": "/mex/renapo/v1/curp-lookups",
+        "method": "POST",
+        "headers": {
+          "x-api-key": {
+            "matches": ".+"
+          }
+        }
+      },
+      "response": {
+        "status": 200,
+        "body": "{\n  \"status\": \"OK\",\n  \"type\": \"SUCCESS\",\n  \"message\": \"CURP found and validated\",\n  \"data\": {\n    \"personalInfo\": {\n      \"curp\": \"TEST900101HDFRRN09\",\n      \"givenNames\": \"JUAN\",\n      \"firstSurname\": \"PEREZ\",\n      \"secondSurname\": \"LOPEZ\",\n      \"gender\": \"H\",\n      \"dateOfBirth\": \"1990-01-01\",\n      \"birthState\": \"DISTRITO FEDERAL\",\n      \"birthStateCode\": \"DF\",\n      \"nationality\": \"MEXICO\"\n    },\n    \"documentDetails\": {\n      \"curpStatus\": \"AN\",\n      \"probatoryDocumentCode\": 1\n    },\n    \"registrationDetails\": {\n      \"state\": \"DISTRITO FEDERAL\",\n      \"stateCode\": \"09\",\n      \"municipality\": \"CUAUHTEMOC\",\n      \"municipalityCode\": \"015\",\n      \"year\": \"1990\",\n      \"foreignNumber\": \"\"\n    }\n  },\n  \"errors\": [\n    {\n      \"field\": \"field\",\n      \"code\": \"code\",\n      \"message\": \"message\"\n    }\n  ],\n  \"transactionId\": \"550e8400-e29b-41d4-a716-446655440020\",\n  \"processedAt\": \"2024-01-15T09:30:00Z\",\n  \"billable\": true\n}",
+        "headers": {
+          "Content-Type": "application/json"
+        }
+      },
+      "uuid": "1d60349d-3a73-428d-9510-46c42e91e5ef",
+      "persistent": true,
+      "priority": 3,
+      "metadata": {
+        "mocklab": {
+          "created": {
+            "at": "2020-01-01T00:00:00.000Z",
+            "via": "SYSTEM"
+          }
+        }
+      }
+    },
+    {
+      "id": "f340078d-89ed-4e96-adab-e6472b86f462",
+      "name": "CURP Official Document (PDF) - By CURP",
+      "request": {
+        "urlPathTemplate": "/mex/renapo/v1/curp-documents",
+        "method": "POST",
+        "headers": {
+          "x-api-key": {
+            "matches": ".+"
+          }
+        }
+      },
+      "response": {
+        "status": 200,
+        "body": "{\n  \"status\": \"OK\",\n  \"type\": \"SUCCESS\",\n  \"message\": \"CURP document retrieved\",\n  \"data\": {\n    \"personalInfo\": {\n      \"curp\": \"TEST900101HDFRRN09\",\n      \"rfc\": \"TEST900101XXX\",\n      \"givenNames\": \"JUAN\",\n      \"firstSurname\": \"PEREZ\",\n      \"secondSurname\": \"LOPEZ\",\n      \"gender\": \"H\",\n      \"dateOfBirth\": \"1990-01-01\",\n      \"birthState\": \"DISTRITO FEDERAL\",\n      \"birthStateCode\": \"DF\",\n      \"nationality\": \"MEXICO\"\n    },\n    \"documentDetails\": {\n      \"curpStatus\": \"AN\",\n      \"probatoryDocumentCode\": 1\n    },\n    \"registrationDetails\": {\n      \"state\": \"DISTRITO FEDERAL\",\n      \"stateCode\": \"09\",\n      \"municipality\": \"CUAUHTEMOC\",\n      \"municipalityCode\": \"015\",\n      \"year\": \"1990\",\n      \"foreignNumber\": \"\"\n    },\n    \"files\": [\n      {\n        \"kind\": \"document\",\n        \"contentType\": \"application/pdf\",\n        \"sizeBytes\": 48213,\n        \"content\": \"JVBERi0xLjQKJeLjz9MKMyAwIG9iago8PC9...TRUNCATED_BASE64...\"\n      }\n    ]\n  },\n  \"errors\": [\n    {\n      \"field\": \"field\",\n      \"code\": \"code\",\n      \"message\": \"message\"\n    }\n  ],\n  \"transactionId\": \"a1b2c3d4-e5f6-7a8b-9c0d-111111111111\",\n  \"processedAt\": \"2024-01-15T09:30:00Z\",\n  \"billable\": true\n}",
+        "headers": {
+          "Content-Type": "application/json"
+        }
+      },
+      "uuid": "f340078d-89ed-4e96-adab-e6472b86f462",
+      "persistent": true,
+      "priority": 3,
+      "metadata": {
+        "mocklab": {
+          "created": {
+            "at": "2020-01-01T00:00:00.000Z",
+            "via": "SYSTEM"
+          }
+        }
+      }
+    },
+    {
+      "id": "e4a57af2-cdb9-4956-9761-e0a3a4afe5a1",
+      "name": "Get NSS - Success",
+      "request": {
+        "urlPathTemplate": "/mex/social-security/v1/imss-nss-lookups",
+        "method": "POST",
+        "headers": {
+          "x-api-key": {
+            "matches": ".+"
+          }
+        }
+      },
+      "response": {
+        "status": 200,
+        "body": "{\n  \"status\": \"OK\",\n  \"type\": \"SUCCESS\",\n  \"message\": \"NSS found\",\n  \"data\": {\n    \"nss\": \"92038109713\"\n  },\n  \"errors\": [\n    {\n      \"field\": \"field\",\n      \"code\": \"code\",\n      \"message\": \"message\"\n    }\n  ],\n  \"transactionId\": \"c5841679-321e-4b05-8d0b-42c457f79e31\",\n  \"processedAt\": \"2024-01-15T09:30:00Z\",\n  \"billable\": true\n}",
+        "headers": {
+          "Content-Type": "application/json"
+        }
+      },
+      "uuid": "e4a57af2-cdb9-4956-9761-e0a3a4afe5a1",
+      "persistent": true,
+      "priority": 3,
+      "metadata": {
+        "mocklab": {
+          "created": {
+            "at": "2020-01-01T00:00:00.000Z",
+            "via": "SYSTEM"
+          }
+        }
+      }
+    },
+    {
+      "id": "944a5d45-3c02-4ac1-a28d-dd8c2dd453e6",
+      "name": "Employment Status - Active Employment",
+      "request": {
+        "urlPathTemplate": "/mex/social-security/v1/imss-employment-status",
+        "method": "POST",
+        "headers": {
+          "x-api-key": {
+            "matches": ".+"
+          }
+        }
+      },
+      "response": {
+        "status": 200,
+        "body": "{\n  \"status\": \"OK\",\n  \"type\": \"SUCCESS\",\n  \"message\": \"Active employment found\",\n  \"data\": {\n    \"nss\": \"92038109713\",\n    \"personalInfo\": {\n      \"curp\": \"GARM900101HDFRZA01\",\n      \"givenNames\": \"SANTIAGO FORTINO\",\n      \"firstSurname\": \"ESPINOZA\",\n      \"secondSurname\": \"SANCHEZ\",\n      \"gender\": \"H\"\n    },\n    \"employmentInformation\": [\n      {\n        \"employerRegistration\": \"Y5473416\",\n        \"modality\": \"10\",\n        \"employerRfc\": \"FDM020722442\",\n        \"employerName\": \"LOGISTICA GLOBAL DE MEXICO S DE RL DE CV\",\n        \"state\": \"CIUDAD DE MEXICO\",\n        \"stateCode\": \"09\",\n        \"baseSalary\": {\n          \"amount\": \"2932.75\",\n          \"currency\": \"MXN\"\n        },\n        \"contributedDays\": 28\n      }\n    ],\n    \"reportDetails\": {\n      \"reportPeriod\": \"2026-02\",\n      \"issueDate\": \"2026-03-15\"\n    }\n  },\n  \"errors\": [\n    {\n      \"field\": \"field\",\n      \"code\": \"code\",\n      \"message\": \"message\"\n    }\n  ],\n  \"transactionId\": \"26aca817-9a02-4119-bc06-2fcab3666454\",\n  \"processedAt\": \"2024-01-15T09:30:00Z\",\n  \"billable\": true\n}",
+        "headers": {
+          "Content-Type": "application/json"
+        }
+      },
+      "uuid": "944a5d45-3c02-4ac1-a28d-dd8c2dd453e6",
+      "persistent": true,
+      "priority": 3,
+      "metadata": {
+        "mocklab": {
+          "created": {
+            "at": "2020-01-01T00:00:00.000Z",
+            "via": "SYSTEM"
+          }
+        }
+      }
+    },
+    {
+      "id": "0c43ae45-3878-439a-9089-711ed24ecb08",
+      "name": "ISSSTE Record - SUCCESS — active worker (2 positions, 5 family members)",
+      "request": {
+        "urlPathTemplate": "/mex/social-security/v1/issste-records",
+        "method": "POST",
+        "headers": {
+          "x-api-key": {
+            "matches": ".+"
+          }
+        }
+      },
+      "response": {
+        "status": 200,
+        "body": "{\n  \"status\": \"OK\",\n  \"type\": \"SUCCESS\",\n  \"message\": \"Active worker found\",\n  \"data\": {\n    \"personalInfo\": {\n      \"curp\": \"GOTM850312MDFMRX05\",\n      \"givenNames\": \"MARIA FERNANDA\",\n      \"firstSurname\": \"GOMEZ\",\n      \"secondSurname\": \"TORRES\",\n      \"rfc\": \"GOTM850312AB1\",\n      \"gender\": \"M\",\n      \"dateOfBirth\": \"1985-03-12\",\n      \"maritalStatus\": \"CASADO\",\n      \"nss\": \"10567890123\"\n    },\n    \"affiliation\": {\n      \"beneficiaryType\": \"TRABAJADOR\",\n      \"affiliationStatus\": \"ACTIVO\",\n      \"governmentEntryDate\": \"2008-01-01\",\n      \"currentPositionStartDate\": \"2008-01-01\"\n    },\n    \"pensionRegime\": {\n      \"seniorityYears\": 19,\n      \"scheme\": \"CUENTAS INDIVIDUALES\"\n    },\n    \"employment\": [\n      {\n        \"agency\": \"SALUD DE TLAXCALA\",\n        \"payrollOffice\": \"SALUD DE TLAXCALA\",\n        \"startDate\": \"2008-01-01\",\n        \"baseSalary\": \"9611.42\",\n        \"positionType\": \"BASE\",\n        \"totalCompensation\": \"14937.00\",\n        \"coverage\": \"TODOS LOS SEGUROS, PRESTACIONES Y SERVICIOS\"\n      },\n      {\n        \"agency\": \"SERVICIOS DE SALUD DEL IMSS PARA EL BIENESTAR\",\n        \"payrollOffice\": \"IMSS BIENESTAR TLAXCALA\",\n        \"startDate\": \"2024-03-01\",\n        \"baseSalary\": \"10452.54\",\n        \"positionType\": \"BASE\",\n        \"totalCompensation\": \"29390.20\",\n        \"coverage\": \"TODOS LOS SEGUROS, PRESTACIONES Y SERVICIOS\"\n      }\n    ],\n    \"pensions\": [\n      {\n        \"agency\": \"PENSIONISTAS Y JUBILADOS CON CARGO AL I.S.S.S.T.E.\",\n        \"payrollOffice\": \"I.S.S.S.T.E. PENSIONISTAS DEUDOS GUANAJUATO\",\n        \"startDate\": \"2022-08-24\",\n        \"pensionNumber\": \"9000000\",\n        \"pensionType\": \"316\",\n        \"pensionAmount\": 25731.3\n      }\n    ],\n    \"contributionHistory\": [\n      {\n        \"agency\": \"SALUD DE TLAXCALA\",\n        \"payrollOffice\": \"SALUD DE TLAXCALA\",\n        \"periodType\": \"NORMAL\",\n        \"startDate\": \"2008-01-01\",\n        \"endDate\": \"2010-12-31\",\n        \"baseSalary\": \"4450.00\"\n      },\n      {\n        \"agency\": \"SALUD DE TLAXCALA\",\n        \"payrollOffice\": \"SALUD DE TLAXCALA\",\n        \"periodType\": \"NORMAL\",\n        \"startDate\": \"2011-01-01\",\n        \"endDate\": \"2012-04-30\",\n        \"baseSalary\": \"5570.00\"\n      }\n    ],\n    \"fovissteHistory\": [\n      {\n        \"agency\": \"SALUD DE TLAXCALA\",\n        \"payrollOffice\": \"SALUD DE TLAXCALA\",\n        \"periodType\": \"NORMAL\",\n        \"startDate\": \"2008-01-01\",\n        \"endDate\": \"2010-12-31\",\n        \"baseSalary\": \"4450.00\"\n      },\n      {\n        \"agency\": \"SALUD DE TLAXCALA\",\n        \"payrollOffice\": \"SALUD DE TLAXCALA\",\n        \"periodType\": \"NORMAL\",\n        \"startDate\": \"2011-01-01\",\n        \"endDate\": \"2012-04-30\",\n        \"baseSalary\": \"5570.00\"\n      }\n    ],\n    \"family\": [\n      {\n        \"curp\": \"GOTL120418HDFMRS00\",\n        \"firstSurname\": \"GOMEZ\",\n        \"secondSurname\": \"TORRES\",\n        \"givenNames\": \"LUIS\",\n        \"relationship\": \"HIJO\",\n        \"status\": \"ACTIVO\",\n        \"dateOfBirth\": \"2012-04-18\",\n        \"registrationDate\": \"2012-05-01\"\n      },\n      {\n        \"curp\": \"RASP840912HDFMLD05\",\n        \"firstSurname\": \"RAMIREZ\",\n        \"secondSurname\": \"SOLIS\",\n        \"givenNames\": \"PEDRO\",\n        \"relationship\": \"ESPOSO\",\n        \"status\": \"ACTIVO\",\n        \"dateOfBirth\": \"1984-09-12\",\n        \"registrationDate\": \"2010-02-01\"\n      }\n    ],\n    \"address\": {\n      \"street\": \"AVENIDA EJEMPLO\",\n      \"exteriorNumber\": \"100\",\n      \"neighborhood\": \"CENTRO\",\n      \"municipality\": \"PUEBLA\",\n      \"state\": \"PUEBLA\",\n      \"postalCode\": \"00000\"\n    },\n    \"clinic\": {\n      \"code\": \"3620300\",\n      \"type\": \"HAE\",\n      \"name\": \"PUEBLA, PUE.\",\n      \"address\": \"JARDINES DE SAN MANUEL, JARDINES DE SAN MANUEL\",\n      \"issteDelegation\": \"DELEGACION ESTATAL EN PUEBLA\",\n      \"phone\": \"2222456950\"\n    },\n    \"files\": [\n      {\n        \"kind\": \"document\",\n        \"contentType\": \"application/pdf\",\n        \"sizeBytes\": 207341,\n        \"content\": \"JVBERi0xLjYKJdP0...TRUNCATED_BASE64...\"\n      },\n      {\n        \"kind\": \"face\",\n        \"contentType\": \"image/jpeg\",\n        \"sizeBytes\": 8421,\n        \"content\": \"/9j/4AAQSkZJRgABAQEAYABgAAD...TRUNCATED_BASE64.../9k=\"\n      }\n    ]\n  },\n  \"errors\": [\n    {\n      \"field\": \"field\",\n      \"code\": \"code\",\n      \"message\": \"message\"\n    }\n  ],\n  \"transactionId\": \"c1d2e3f4-a5b6-7c8d-9e0f-success00000\",\n  \"processedAt\": \"2024-01-15T09:30:00Z\",\n  \"billable\": true\n}",
+        "headers": {
+          "Content-Type": "application/json"
+        }
+      },
+      "uuid": "0c43ae45-3878-439a-9089-711ed24ecb08",
+      "persistent": true,
+      "priority": 3,
+      "metadata": {
+        "mocklab": {
+          "created": {
+            "at": "2020-01-01T00:00:00.000Z",
+            "via": "SYSTEM"
+          }
+        }
+      }
+    },
+    {
+      "id": "27ddbd2a-5f89-4202-8cf8-ee2160a50ef2",
+      "name": "Validate Voter List - default",
+      "request": {
+        "urlPathTemplate": "/mex/id/v1/voter-list-validations",
+        "method": "POST",
+        "headers": {
+          "x-api-key": {
+            "matches": ".+"
+          }
+        }
+      },
+      "response": {
+        "status": 200,
+        "body": "{\n  \"status\": \"OK\",\n  \"type\": \"type\",\n  \"message\": \"message\",\n  \"data\": {\n    \"data\": {\n      \"key\": \"value\"\n    }\n  },\n  \"errors\": [\n    {\n      \"field\": \"field\",\n      \"code\": \"code\",\n      \"message\": \"message\"\n    },\n    {\n      \"field\": \"field\",\n      \"code\": \"code\",\n      \"message\": \"message\"\n    }\n  ],\n  \"transactionId\": \"transactionId\",\n  \"processedAt\": \"2024-01-15T09:30:00Z\",\n  \"billable\": true\n}",
+        "headers": {
+          "Content-Type": "application/json"
+        }
+      },
+      "uuid": "27ddbd2a-5f89-4202-8cf8-ee2160a50ef2",
+      "persistent": true,
+      "priority": 3,
+      "metadata": {
+        "mocklab": {
+          "created": {
+            "at": "2020-01-01T00:00:00.000Z",
+            "via": "SYSTEM"
+          }
+        }
+      }
+    },
+    {
+      "id": "f538fb28-b510-46ec-b384-62da7cc17b1e",
+      "name": "ID Data Extraction (OCR & Geocoding) - Success: IFE Type D (pre-2014)",
+      "request": {
+        "urlPathTemplate": "/mex/id/v1/voter-id-extractions",
+        "method": "POST",
+        "headers": {
+          "x-api-key": {
+            "matches": ".+"
+          }
+        }
+      },
+      "response": {
+        "status": 200,
+        "body": "{\n  \"status\": \"OK\",\n  \"type\": \"SUCCESS\",\n  \"message\": \"Document processed successfully\",\n  \"data\": {\n    \"documentType\": \"IFE\",\n    \"model\": \"D\",\n    \"personalInfo\": {\n      \"givenNames\": \"RAQUEL\",\n      \"firstSurname\": \"MIRANDA\",\n      \"secondSurname\": \"ARAUJO\",\n      \"dateOfBirth\": \"1979-02-19\",\n      \"gender\": \"M\",\n      \"curp\": \"MXAR790219MSLRRQ00\",\n      \"electorKey\": \"MRARRQ79021925M800\"\n    },\n    \"address\": {\n      \"addressLine1\": \"C EL CAPULE 392\",\n      \"addressLine2\": \"FRACC JARDINES DE LA SIERRA 80019\",\n      \"addressLine3\": \"CULIACAN, SIN.\"\n    },\n    \"addressNormalized\": {\n      \"key\": \"value\"\n    },\n    \"electoralGeography\": {\n      \"state\": \"25\",\n      \"municipality\": \"006\",\n      \"section\": \"1218\",\n      \"locality\": \"0001\"\n    },\n    \"validity\": {\n      \"registrationYear\": \"1999\",\n      \"emissionNumber\": \"03\",\n      \"emissionYear\": \"2014\",\n      \"validUntilYear\": \"2024\"\n    },\n    \"security\": {\n      \"cic\": \"119195412\",\n      \"ocr\": \"1218079288742\",\n      \"citizenIdentifier\": \"079288742\",\n      \"barCode\": \"119195412\",\n      \"qr\": \"http://qr.ife.org.mx/121807928874203119195412/20140626/S/006176\",\n      \"mrz\": \"IDMEX1191954121<<12180792887427902192M2412311MEX<03<<10110<1MIRANDAARAUJO<<RAQUEL27demarz\"\n    },\n    \"mrzValidation\": {\n      \"dateOfBirth\": true,\n      \"gender\": true,\n      \"validity\": true,\n      \"emission\": true,\n      \"cic\": true,\n      \"name\": false\n    },\n    \"qrValidation\": {\n      \"cic\": true,\n      \"ocr\": true,\n      \"citizenIdentifier\": true\n    },\n    \"files\": [\n      {\n        \"kind\": \"face\",\n        \"contentType\": \"image/jpeg\",\n        \"sizeBytes\": 8421,\n        \"content\": \"/9j/4AAQSkZJRgABAQEAYABgAAD...TRUNCATED_BASE64.../9k=\"\n      }\n    ]\n  },\n  \"errors\": [\n    {\n      \"field\": \"field\",\n      \"code\": \"code\",\n      \"message\": \"message\"\n    }\n  ],\n  \"transactionId\": \"550e8400-e29b-41d4-a716-446655440000\",\n  \"processedAt\": \"2024-01-15T09:30:00Z\",\n  \"billable\": true\n}",
+        "headers": {
+          "Content-Type": "application/json"
+        }
+      },
+      "uuid": "f538fb28-b510-46ec-b384-62da7cc17b1e",
+      "persistent": true,
+      "priority": 3,
+      "metadata": {
+        "mocklab": {
+          "created": {
+            "at": "2020-01-01T00:00:00.000Z",
+            "via": "SYSTEM"
+          }
+        }
+      }
+    },
+    {
+      "id": "f73a7e4d-0932-492e-99a5-fa9c68423315",
+      "name": "INE QR Code Data Extraction - Success: INE Model G",
+      "request": {
+        "urlPathTemplate": "/mex/id/v1/qr-extractions",
+        "method": "POST",
+        "headers": {
+          "x-api-key": {
+            "matches": ".+"
+          }
+        }
+      },
+      "response": {
+        "status": 200,
+        "body": "{\n  \"status\": \"OK\",\n  \"type\": \"SUCCESS\",\n  \"message\": \"Document processed successfully\",\n  \"data\": {\n    \"documentType\": \"INE\",\n    \"model\": \"G\",\n    \"personalInfo\": {\n      \"givenNames\": \"MARIA FERNANDA\",\n      \"firstSurname\": \"LOPEZ\",\n      \"secondSurname\": \"GARCIA\",\n      \"gender\": \"M\",\n      \"curp\": \"LOGF950312MDFPRR08\"\n    },\n    \"electoralGeography\": {\n      \"stateCode\": \"09\",\n      \"stateName\": \"CIUDAD DE MÉXICO\",\n      \"municipalityCode\": \"014\",\n      \"municipalityName\": \"IZTAPALAPA\",\n      \"section\": \"1832\"\n    },\n    \"validity\": {\n      \"issuedYear\": \"2020\",\n      \"validUntilYear\": \"2030\",\n      \"emissionDate\": \"2020-08-15\",\n      \"emissionNumber\": \"1\"\n    },\n    \"security\": {\n      \"cic\": \"312456789\",\n      \"ocr\": \"1832054321987\"\n    },\n    \"files\": [\n      {\n        \"kind\": \"face\",\n        \"contentType\": \"image/png\",\n        \"sizeBytes\": 20496,\n        \"content\": \"iVBORw0KGgoAAAANSUhEUgAAAGAAAACACAIAAAB7vvvt...\"\n      }\n    ]\n  },\n  \"errors\": [\n    {\n      \"field\": \"field\",\n      \"code\": \"code\",\n      \"message\": \"message\"\n    }\n  ],\n  \"transactionId\": \"e8cbd7dc-a528-499e-b868-5fa956f30ca9\",\n  \"processedAt\": \"2024-01-15T09:30:00Z\",\n  \"billable\": true\n}",
+        "headers": {
+          "Content-Type": "application/json"
+        }
+      },
+      "uuid": "f73a7e4d-0932-492e-99a5-fa9c68423315",
+      "persistent": true,
+      "priority": 3,
+      "metadata": {
+        "mocklab": {
+          "created": {
+            "at": "2020-01-01T00:00:00.000Z",
+            "via": "SYSTEM"
+          }
+        }
+      }
+    },
+    {
+      "id": "f25b5df8-9113-42f4-a9fb-4b33d792e525",
+      "name": "Global Biometric Face Match - Match INE",
+      "request": {
+        "urlPathTemplate": "/global/biometrics/v1/face-matches",
+        "method": "POST",
+        "headers": {
+          "x-api-key": {
+            "matches": ".+"
+          }
+        }
+      },
+      "response": {
+        "status": 200,
+        "body": "{\n  \"status\": \"OK\",\n  \"type\": \"SUCCESS\",\n  \"message\": \"Faces match\",\n  \"data\": {\n    \"faceMatchScore\": 96.4,\n    \"isMatch\": true,\n    \"thresholdApplied\": 90,\n    \"detectedDocumentType\": \"INE\",\n    \"selfieAnalysis\": {\n      \"imageQuality\": \"excellent\",\n      \"detectionConfidence\": \"high\",\n      \"orientation\": \"front\",\n      \"eyesOpen\": true,\n      \"mouthOpen\": false,\n      \"wearingGlasses\": false,\n      \"wearingSunglasses\": false,\n      \"faceCovered\": false,\n      \"issues\": [\n        \"wearing_glasses\"\n      ]\n    }\n  },\n  \"errors\": [\n    {\n      \"field\": \"field\",\n      \"code\": \"code\",\n      \"message\": \"message\"\n    }\n  ],\n  \"transactionId\": \"5c9e1f2a-3b4c-4d5e-6f7a-8b9c0d1e2f3a\",\n  \"processedAt\": \"2024-01-15T09:30:00Z\",\n  \"billable\": true\n}",
+        "headers": {
+          "Content-Type": "application/json"
+        }
+      },
+      "uuid": "f25b5df8-9113-42f4-a9fb-4b33d792e525",
+      "persistent": true,
+      "priority": 3,
+      "metadata": {
+        "mocklab": {
+          "created": {
+            "at": "2020-01-01T00:00:00.000Z",
+            "via": "SYSTEM"
+          }
+        }
+      }
+    },
+    {
+      "id": "11fd6166-e543-45f1-80d2-d78dccfffe4f",
+      "name": "Passive Liveness Detection - Live (real person)",
+      "request": {
+        "urlPathTemplate": "/global/biometrics/v1/liveness-checks",
+        "method": "POST",
+        "headers": {
+          "x-api-key": {
+            "matches": ".+"
+          }
+        }
+      },
+      "response": {
+        "status": 200,
+        "body": "{\n  \"status\": \"OK\",\n  \"type\": \"SUCCESS\",\n  \"message\": \"Liveness check completed\",\n  \"data\": {\n    \"isLive\": true,\n    \"livenessScore\": 94,\n    \"confidence\": \"HIGH\",\n    \"attackTypes\": {\n      \"key\": \"value\"\n    }\n  },\n  \"errors\": [\n    {\n      \"field\": \"field\",\n      \"code\": \"code\",\n      \"message\": \"message\"\n    }\n  ],\n  \"transactionId\": \"442133b3-5177-4033-a3bc-d643768d5449\",\n  \"processedAt\": \"2024-01-15T09:30:00Z\",\n  \"billable\": true\n}",
+        "headers": {
+          "Content-Type": "application/json"
+        }
+      },
+      "uuid": "11fd6166-e543-45f1-80d2-d78dccfffe4f",
+      "persistent": true,
+      "priority": 3,
+      "metadata": {
+        "mocklab": {
+          "created": {
+            "at": "2020-01-01T00:00:00.000Z",
+            "via": "SYSTEM"
+          }
+        }
+      }
+    },
+    {
+      "id": "5e4abd1e-d8cc-4d5b-bc60-6d246a369417",
+      "name": "SAT Article 69 Check - By Name",
+      "request": {
+        "urlPathTemplate": "/mex/compliance/v1/sat-69-searches",
+        "method": "POST",
+        "headers": {
+          "x-api-key": {
+            "matches": ".+"
+          }
+        }
+      },
+      "response": {
+        "status": 200,
+        "body": "{\n  \"status\": \"OK\",\n  \"type\": \"SUCCESS\",\n  \"message\": \"No SAT 69 matches found\",\n  \"data\": {\n    \"matchFound\": false,\n    \"riskLevel\": \"NONE\",\n    \"totalMatchesFound\": 0,\n    \"matches\": {\n      \"key\": \"value\"\n    }\n  },\n  \"errors\": [\n    {\n      \"field\": \"field\",\n      \"code\": \"code\",\n      \"message\": \"message\"\n    }\n  ],\n  \"transactionId\": \"c3d4e5f6-a7b8-9c0d-1e2f-234567890123\",\n  \"processedAt\": \"2024-01-15T09:30:00Z\",\n  \"billable\": true\n}",
+        "headers": {
+          "Content-Type": "application/json"
+        }
+      },
+      "uuid": "5e4abd1e-d8cc-4d5b-bc60-6d246a369417",
+      "persistent": true,
+      "priority": 3,
+      "metadata": {
+        "mocklab": {
+          "created": {
+            "at": "2020-01-01T00:00:00.000Z",
+            "via": "SYSTEM"
+          }
+        }
+      }
+    },
+    {
+      "id": "ec347ed6-50b9-4831-9889-4dd2fce82a20",
+      "name": "SAT Article 69-B Check (EFOS) - By Name",
+      "request": {
+        "urlPathTemplate": "/mex/compliance/v1/sat-69b-searches",
+        "method": "POST",
+        "headers": {
+          "x-api-key": {
+            "matches": ".+"
+          }
+        }
+      },
+      "response": {
+        "status": 200,
+        "body": "{\n  \"status\": \"OK\",\n  \"type\": \"SUCCESS\",\n  \"message\": \"No SAT 69-B matches found\",\n  \"data\": {\n    \"matchFound\": false,\n    \"riskLevel\": \"NONE\",\n    \"totalMatchesFound\": 0,\n    \"matches\": {\n      \"key\": \"value\"\n    }\n  },\n  \"errors\": [\n    {\n      \"field\": \"field\",\n      \"code\": \"code\",\n      \"message\": \"message\"\n    }\n  ],\n  \"transactionId\": \"c3d4e5f6-a7b8-9c0d-1e2f-234567890123\",\n  \"processedAt\": \"2024-01-15T09:30:00Z\",\n  \"billable\": true\n}",
+        "headers": {
+          "Content-Type": "application/json"
+        }
+      },
+      "uuid": "ec347ed6-50b9-4831-9889-4dd2fce82a20",
+      "persistent": true,
+      "priority": 3,
+      "metadata": {
+        "mocklab": {
+          "created": {
+            "at": "2020-01-01T00:00:00.000Z",
+            "via": "SYSTEM"
+          }
+        }
+      }
+    },
+    {
+      "id": "cb24ca6f-d35b-4fea-875d-fb4dd793e045",
+      "name": "OFAC Sanctions List Check - Name only (basic)",
+      "request": {
+        "urlPathTemplate": "/global/compliance/v1/ofac-searches",
+        "method": "POST",
+        "headers": {
+          "x-api-key": {
+            "matches": ".+"
+          }
+        }
+      },
+      "response": {
+        "status": 200,
+        "body": "{\n  \"status\": \"OK\",\n  \"type\": \"SUCCESS\",\n  \"message\": \"No OFAC matches found\",\n  \"data\": {\n    \"matchFound\": false,\n    \"riskLevel\": \"NONE\",\n    \"totalMatchesFound\": 0,\n    \"matches\": {\n      \"key\": \"value\"\n    }\n  },\n  \"errors\": [\n    {\n      \"field\": \"field\",\n      \"code\": \"code\",\n      \"message\": \"message\"\n    }\n  ],\n  \"transactionId\": \"9041aa05-782b-461e-9033-5e07b2ad55fc\",\n  \"processedAt\": \"2024-01-15T09:30:00Z\",\n  \"billable\": true\n}",
+        "headers": {
+          "Content-Type": "application/json"
+        }
+      },
+      "uuid": "cb24ca6f-d35b-4fea-875d-fb4dd793e045",
+      "persistent": true,
+      "priority": 3,
+      "metadata": {
+        "mocklab": {
+          "created": {
+            "at": "2020-01-01T00:00:00.000Z",
+            "via": "SYSTEM"
+          }
+        }
+      }
+    },
+    {
+      "id": "871ea531-60e1-4b57-a965-1d0b558efee1",
+      "name": "PEP (Politically Exposed Person) Check - By single name (basic)",
+      "request": {
+        "urlPathTemplate": "/mex/compliance/v1/peps-searches",
+        "method": "POST",
+        "headers": {
+          "x-api-key": {
+            "matches": ".+"
+          }
+        }
+      },
+      "response": {
+        "status": 200,
+        "body": "{\n  \"status\": \"OK\",\n  \"type\": \"SUCCESS\",\n  \"message\": \"No PEPs matches found\",\n  \"data\": {\n    \"matchFound\": false,\n    \"riskLevel\": \"NONE\",\n    \"totalMatchesFound\": 0,\n    \"matches\": {\n      \"key\": \"value\"\n    }\n  },\n  \"errors\": [\n    {\n      \"field\": \"field\",\n      \"code\": \"code\",\n      \"message\": \"message\"\n    }\n  ],\n  \"transactionId\": \"d2b0b572-0be8-4744-bf0d-72f21135125b\",\n  \"processedAt\": \"2024-01-15T09:30:00Z\",\n  \"billable\": true\n}",
+        "headers": {
+          "Content-Type": "application/json"
+        }
+      },
+      "uuid": "871ea531-60e1-4b57-a965-1d0b558efee1",
+      "persistent": true,
+      "priority": 3,
+      "metadata": {
+        "mocklab": {
+          "created": {
+            "at": "2020-01-01T00:00:00.000Z",
+            "via": "SYSTEM"
+          }
+        }
+      }
+    },
+    {
+      "id": "99f8ed39-d536-424d-b73d-7888b52a0b7a",
+      "name": "Email Deliverability & Fraud Validation - Risk: NONE — deliverable mailbox",
+      "request": {
+        "urlPathTemplate": "/global/email/v1/email-validations",
+        "method": "POST",
+        "headers": {
+          "x-api-key": {
+            "matches": ".+"
+          }
+        }
+      },
+      "response": {
+        "status": 200,
+        "body": "{\n  \"status\": \"OK\",\n  \"type\": \"SUCCESS\",\n  \"message\": \"Email is valid and active\",\n  \"data\": {\n    \"email\": \"user@example.com\",\n    \"deliverability\": \"deliverable\",\n    \"riskLevel\": \"NONE\",\n    \"score\": 100,\n    \"toxicityScore\": 0,\n    \"verdicts\": {\n      \"isFree\": false,\n      \"isDisposable\": false,\n      \"isRoleAccount\": false,\n      \"isFull\": false,\n      \"isCatchAll\": false,\n      \"isToxic\": false\n    },\n    \"infrastructure\": {\n      \"domain\": \"origoid.com\",\n      \"provider\": \"amazon.com\",\n      \"mxRecord\": \"inbound-smtp.mx-central-2.amazonaws.com.\"\n    }\n  },\n  \"errors\": [\n    {\n      \"field\": \"field\",\n      \"code\": \"code\",\n      \"message\": \"message\"\n    }\n  ],\n  \"transactionId\": \"550e8400-e29b-41d4-a716-446655440000\",\n  \"processedAt\": \"2024-01-15T09:30:00Z\",\n  \"billable\": true\n}",
+        "headers": {
+          "Content-Type": "application/json"
+        }
+      },
+      "uuid": "99f8ed39-d536-424d-b73d-7888b52a0b7a",
+      "persistent": true,
+      "priority": 3,
+      "metadata": {
+        "mocklab": {
+          "created": {
+            "at": "2020-01-01T00:00:00.000Z",
+            "via": "SYSTEM"
+          }
+        }
+      }
+    },
+    {
+      "id": "7a0228e3-df3e-42b8-b63c-a88b2f5581ef",
+      "name": "Universal Extraction (Proof of Address) - Success CFE",
+      "request": {
+        "urlPathTemplate": "/mex/documents/v1/proof-of-address-extractions",
+        "method": "POST",
+        "headers": {
+          "x-api-key": {
+            "matches": ".+"
+          }
+        }
+      },
+      "response": {
+        "status": 200,
+        "body": "{\n  \"status\": \"OK\",\n  \"type\": \"SUCCESS\",\n  \"message\": \"Proof of address processed successfully\",\n  \"data\": {\n    \"documentType\": \"PROOF_OF_ADDRESS\",\n    \"provider\": \"CFE\",\n    \"personalInfo\": {\n      \"fullName\": \"CARLOS MENDOZA RUIZ\"\n    },\n    \"address\": {\n      \"street\": \"CALLE DE LOS PINOS 45 INT 3\",\n      \"neighborhood\": \"JARDINES DEL VALLE\",\n      \"city\": \"ZAPOPAN\",\n      \"state\": \"JAL\",\n      \"zipCode\": \"45138\",\n      \"reference\": \"ENTRE ROBLES Y CEDROS\",\n      \"fullAddressRaw\": \"CALLE DE LOS PINOS 45 INT 3 JARDINES DEL VALLE C.P. 45138 ZAPOPAN , JAL .\"\n    },\n    \"billing\": {\n      \"accountNumber\": \"847291038472\",\n      \"amountDue\": {\n        \"amount\": \"452.50\",\n        \"currency\": \"MXN\"\n      },\n      \"dueDate\": \"2023-11-20\",\n      \"paymentCode\": \"01847291038472311200000004525\"\n    },\n    \"validations\": {\n      \"isRecent\": false,\n      \"monthsOld\": 28\n    }\n  },\n  \"errors\": [\n    {\n      \"field\": \"field\",\n      \"code\": \"code\",\n      \"message\": \"message\"\n    }\n  ],\n  \"transactionId\": \"f47ac10b-58cc-4372-a567-0e02b2c3d479\",\n  \"processedAt\": \"2024-01-15T09:30:00Z\",\n  \"billable\": true\n}",
+        "headers": {
+          "Content-Type": "application/json"
+        }
+      },
+      "uuid": "7a0228e3-df3e-42b8-b63c-a88b2f5581ef",
+      "persistent": true,
+      "priority": 3,
+      "metadata": {
+        "mocklab": {
+          "created": {
+            "at": "2020-01-01T00:00:00.000Z",
+            "via": "SYSTEM"
+          }
+        }
+      }
+    },
+    {
+      "id": "8f60a7e8-64c8-4837-885f-a7c590c89509",
+      "name": "RFC Status and LCO Validation - Risk: NONE — RFC valid & invoiceable",
+      "request": {
+        "urlPathTemplate": "/mex/fiscal/v1/rfc-validations",
+        "method": "POST",
+        "headers": {
+          "x-api-key": {
+            "matches": ".+"
+          }
+        }
+      },
+      "response": {
+        "status": 200,
+        "body": "{\n  \"status\": \"OK\",\n  \"type\": \"SUCCESS\",\n  \"message\": \"RFC is valid and authorized for invoicing\",\n  \"data\": {\n    \"rfc\": \"GARM900101HDF\",\n    \"isValid\": true,\n    \"isBillable\": true,\n    \"taxpayerType\": \"PERSONA_FISICA\",\n    \"riskLevel\": \"NONE\",\n    \"officialMessage\": \"RFC válido, y susceptible de recibir facturas\"\n  },\n  \"errors\": [\n    {\n      \"field\": \"field\",\n      \"code\": \"code\",\n      \"message\": \"message\"\n    }\n  ],\n  \"transactionId\": \"f1a2b3c4-d5e6-7f8a-9b0c-123456789001\",\n  \"processedAt\": \"2024-01-15T09:30:00Z\",\n  \"billable\": true\n}",
+        "headers": {
+          "Content-Type": "application/json"
+        }
+      },
+      "uuid": "8f60a7e8-64c8-4837-885f-a7c590c89509",
+      "persistent": true,
+      "priority": 3,
+      "metadata": {
+        "mocklab": {
+          "created": {
+            "at": "2020-01-01T00:00:00.000Z",
+            "via": "SYSTEM"
+          }
+        }
+      }
+    },
+    {
+      "id": "3c367ec1-28d5-4077-8aaa-ea8f25fe8c36",
+      "name": "CSF Data Extraction & Validation (Multi-input) - By RFC + CIF",
+      "request": {
+        "urlPathTemplate": "/mex/fiscal/v1/csf-extractions",
+        "method": "POST",
+        "headers": {
+          "x-api-key": {
+            "matches": ".+"
+          }
+        }
+      },
+      "response": {
+        "status": 200,
+        "body": "{\n  \"status\": \"OK\",\n  \"type\": \"SUCCESS\",\n  \"message\": \"Company information retrieved successfully\",\n  \"data\": {\n    \"rfc\": \"ACM240101A23\",\n    \"idCif\": \"24010199999\",\n    \"taxpayerType\": \"PERSONA_MORAL\",\n    \"status\": \"ACTIVO\",\n    \"registrationDate\": \"2024-01-01\",\n    \"lastStatusChangeDate\": \"2024-01-01\",\n    \"personalInfo\": {\n      \"legalName\": \"ACME DEMO\",\n      \"legalType\": \"SOCIEDAD ANONIMA DE CAPITAL VARIABLE\",\n      \"constitutionDate\": \"2024-01-01\"\n    },\n    \"addressNormalized\": {\n      \"street\": \"AVENIDA EJEMPLO\",\n      \"exteriorNumber\": \"61\",\n      \"interiorNumber\": \"INTERIOR 901\",\n      \"neighborhood\": \"COLONIA EJEMPLO\",\n      \"zipCode\": \"11560\",\n      \"municipality\": \"MIGUEL HIDALGO\",\n      \"state\": \"CIUDAD DE MEXICO\",\n      \"country\": \"MEXICO\",\n      \"betweenStreets\": \"CALLE PRIMERA Y CALLE SEGUNDA\",\n      \"email\": \"juan.perez@example.com\"\n    },\n    \"taxRegimes\": [\n      {\n        \"description\": \"Régimen General de Ley Personas Morales\",\n        \"startDate\": \"2024-01-01\"\n      }\n    ],\n    \"economicActivities\": [\n      {\n        \"description\": \"Servicios de consultoria en computación\",\n        \"percentage\": 100,\n        \"startDate\": \"2024-01-01\"\n      }\n    ],\n    \"taxObligations\": [\n      {\n        \"description\": \"Declaración de proveedores de IVA\",\n        \"dueDate\": \"A más tardar el último día del mes inmediato posterior al periodo que corresponda\",\n        \"startDate\": \"2024-01-01\"\n      },\n      {\n        \"description\": \"Pago provisional mensual de ISR personas morales régimen general\",\n        \"dueDate\": \"A más tardar el día 17 del mes inmediato posterior al periodo que corresponda\",\n        \"startDate\": \"2022-01-01\"\n      }\n    ]\n  },\n  \"errors\": [\n    {\n      \"field\": \"field\",\n      \"code\": \"code\",\n      \"message\": \"message\"\n    }\n  ],\n  \"transactionId\": \"e9df0229-e1ed-4c09-bd57-0ec81ead9744\",\n  \"processedAt\": \"2024-01-15T09:30:00Z\",\n  \"billable\": true\n}",
+        "headers": {
+          "Content-Type": "application/json"
+        }
+      },
+      "uuid": "3c367ec1-28d5-4077-8aaa-ea8f25fe8c36",
+      "persistent": true,
+      "priority": 3,
+      "metadata": {
+        "mocklab": {
+          "created": {
+            "at": "2020-01-01T00:00:00.000Z",
+            "via": "SYSTEM"
+          }
+        }
+      }
+    },
+    {
+      "id": "bfb509cb-e04d-4cb6-9ef7-6b3d80ae0123",
+      "name": "Validate CFDI (Electronic Invoice) - default",
+      "request": {
+        "urlPathTemplate": "/mex/fiscal/v1/cfdi-validations",
+        "method": "POST",
+        "headers": {
+          "x-api-key": {
+            "matches": ".+"
+          }
+        }
+      },
+      "response": {
+        "status": 200,
+        "body": "{\n  \"status\": \"OK\",\n  \"type\": \"type\",\n  \"message\": \"message\",\n  \"data\": {\n    \"data\": {\n      \"key\": \"value\"\n    }\n  },\n  \"errors\": [\n    {\n      \"field\": \"field\",\n      \"code\": \"code\",\n      \"message\": \"message\"\n    },\n    {\n      \"field\": \"field\",\n      \"code\": \"code\",\n      \"message\": \"message\"\n    }\n  ],\n  \"transactionId\": \"transactionId\",\n  \"processedAt\": \"2024-01-15T09:30:00Z\",\n  \"billable\": true\n}",
+        "headers": {
+          "Content-Type": "application/json"
+        }
+      },
+      "uuid": "bfb509cb-e04d-4cb6-9ef7-6b3d80ae0123",
+      "persistent": true,
+      "priority": 3,
+      "metadata": {
+        "mocklab": {
+          "created": {
+            "at": "2020-01-01T00:00:00.000Z",
+            "via": "SYSTEM"
+          }
+        }
+      }
+    },
+    {
+      "id": "4f61758b-ebf8-4b46-b34a-1aa3f4cb178b",
+      "name": "CEP / SPEI Payment Validation - default",
+      "request": {
+        "urlPathTemplate": "/mex/banking/v1/cep-validations",
+        "method": "POST",
+        "headers": {
+          "x-api-key": {
+            "matches": ".+"
+          }
+        }
+      },
+      "response": {
+        "status": 200,
+        "body": "{\n  \"data\": {\n    \"valid\": true,\n    \"banxicoStatus\": \"banxicoStatus\",\n    \"trackingKey\": \"trackingKey\",\n    \"referenceNumber\": \"referenceNumber\",\n    \"operationDate\": \"2023-01-15\",\n    \"concept\": \"concept\",\n    \"amount\": {\n      \"value\": \"value\",\n      \"currency\": \"MXN\"\n    },\n    \"sender\": {\n      \"name\": \"name\",\n      \"bankCode\": \"bankCode\",\n      \"bankName\": \"bankName\",\n      \"account\": \"account\",\n      \"accountType\": \"CLABE\",\n      \"rfc\": \"rfc\"\n    },\n    \"beneficiary\": {\n      \"name\": \"name\",\n      \"bankCode\": \"bankCode\",\n      \"bankName\": \"bankName\",\n      \"account\": \"account\",\n      \"accountType\": \"CLABE\",\n      \"rfc\": \"rfc\"\n    },\n    \"timeline\": {\n      \"operatedAt\": \"2024-01-15T09:30:00Z\",\n      \"receivedAt\": \"2024-01-15T09:30:00Z\",\n      \"settledAt\": \"2024-01-15T09:30:00Z\",\n      \"returnReceivedAt\": \"2024-01-15T09:30:00Z\",\n      \"returnSettledAt\": \"2024-01-15T09:30:00Z\"\n    },\n    \"spei\": {\n      \"speiKey\": \"speiKey\",\n      \"certificateNumber\": \"certificateNumber\",\n      \"signature\": \"signature\",\n      \"cdaChain\": \"cdaChain\"\n    },\n    \"files\": [\n      {\n        \"kind\": \"kind\",\n        \"contentType\": \"contentType\",\n        \"sizeBytes\": 1,\n        \"content\": \"content\"\n      },\n      {\n        \"kind\": \"kind\",\n        \"contentType\": \"contentType\",\n        \"sizeBytes\": 1,\n        \"content\": \"content\"\n      }\n    ]\n  },\n  \"status\": \"OK\",\n  \"type\": \"type\",\n  \"message\": \"message\",\n  \"errors\": [\n    {\n      \"field\": \"field\",\n      \"code\": \"code\",\n      \"message\": \"message\"\n    },\n    {\n      \"field\": \"field\",\n      \"code\": \"code\",\n      \"message\": \"message\"\n    }\n  ],\n  \"transactionId\": \"transactionId\",\n  \"processedAt\": \"2024-01-15T09:30:00Z\",\n  \"billable\": true\n}",
+        "headers": {
+          "Content-Type": "application/json"
+        }
+      },
+      "uuid": "4f61758b-ebf8-4b46-b34a-1aa3f4cb178b",
+      "persistent": true,
+      "priority": 3,
+      "metadata": {
+        "mocklab": {
+          "created": {
+            "at": "2020-01-01T00:00:00.000Z",
+            "via": "SYSTEM"
+          }
+        }
+      }
+    }
+  ],
+  "meta": {
+    "total": 22
+  }
+}

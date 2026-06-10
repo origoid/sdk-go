@@ -1,0 +1,14 @@
+{
+  "cliVersion": "5.45.0",
+  "generatorName": "fernapi/fern-go-sdk",
+  "generatorVersion": "1.44.5",
+  "generatorConfig": {
+    "module": {
+      "path": "github.com/origoid/sdk-go"
+    },
+    "retryStatusCodes": "legacy"
+  },
+  "originGitCommit": "0bf2c29068052aea52e9f3bb0bb566fcd13b213a",
+  "originGitCommitIsDirty": true,
+  "invokedBy": "manual"
+}
