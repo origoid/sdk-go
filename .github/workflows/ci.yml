@@ -14,6 +14,7 @@ jobs:
 
       - name: Compile
         run: go build ./...
+
   test:
     runs-on: ubuntu-latest
     steps:
@@ -22,6 +23,18 @@ jobs:
 
       - name: Set up go
         uses: actions/setup-go@v4
+
+      # Generated tests (fern-go-sdk >=1.x) are WireMock client tests that
+      # expect a mock server on localhost:8080 with the generated mappings.
+      - name: Start WireMock
+        run: |
+          docker run -d --name wiremock -p 8080:8080 \
+            -v "$GITHUB_WORKSPACE/wiremock/wiremock-mappings.json:/home/wiremock/mappings/wiremock-mappings.json" \
+            wiremock/wiremock:3.9.1
+          for i in $(seq 1 30); do
+            curl -fs http://localhost:8080/__admin/health && break
+            sleep 2
+          done
 
       - name: Test
         run: go test ./...
