@@ -116,7 +116,7 @@ func TestFiscalExtractCsfWithWireMock(
 	)
 	request := &sdkgo.ExtractCsfRequest{
 		Unknown: map[string]any{
-			"cif": "12345678901",
+			"cif": "24010199999",
 			"rfc": "PELJ900101AAA",
 		},
 	}
