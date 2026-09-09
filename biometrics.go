@@ -11,12 +11,15 @@ import (
 )
 
 var (
-	checkLivenessRequestFieldSelfie = big.NewInt(1 << 0)
+	checkLivenessRequestFieldSelfie             = big.NewInt(1 << 0)
+	checkLivenessRequestFieldAllowMultipleFaces = big.NewInt(1 << 1)
 )
 
 type CheckLivenessRequest struct {
 	// Selfie image of the subject in Base64 (PNG/JPG).
 	Selfie string `json:"selfie" url:"-"`
+	// Optional. When `false` (default), a selfie with another person in frame returns `MULTIPLE_FACES_DETECTED`. When `true`, the largest face in the image is evaluated and the others are ignored.
+	AllowMultipleFaces *bool `json:"allowMultipleFaces,omitempty" url:"-"`
 
 	// Private bitmask of fields set to an explicit value and therefore not to be omitted
 	explicitFields *big.Int `json:"-" url:"-"`
@@ -34,6 +37,13 @@ func (c *CheckLivenessRequest) require(field *big.Int) {
 func (c *CheckLivenessRequest) SetSelfie(selfie string) {
 	c.Selfie = selfie
 	c.require(checkLivenessRequestFieldSelfie)
+}
+
+// SetAllowMultipleFaces sets the AllowMultipleFaces field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CheckLivenessRequest) SetAllowMultipleFaces(allowMultipleFaces *bool) {
+	c.AllowMultipleFaces = allowMultipleFaces
+	c.require(checkLivenessRequestFieldAllowMultipleFaces)
 }
 
 func (c *CheckLivenessRequest) UnmarshalJSON(data []byte) error {
@@ -623,6 +633,728 @@ func NewFaceMatchDataSelfieAnalysisOrientationFromString(s string) (FaceMatchDat
 
 func (f FaceMatchDataSelfieAnalysisOrientation) Ptr() *FaceMatchDataSelfieAnalysisOrientation {
 	return &f
+}
+
+// Liveness result. Null for `INVALID_REQUEST`, `INTERNAL_ERROR` and `SERVICE_UNAVAILABLE`. On every `OK` outcome the object is present: when nothing could be evaluated (`NO_FACE_DETECTED`, `MULTIPLE_FACES_DETECTED`, `IMAGE_UNREADABLE`) `isLive` is `false` and the remaining fields are null.
+var (
+	livenessDataFieldIsLive         = big.NewInt(1 << 0)
+	livenessDataFieldLivenessScore  = big.NewInt(1 << 1)
+	livenessDataFieldConfidence     = big.NewInt(1 << 2)
+	livenessDataFieldSelfieAnalysis = big.NewInt(1 << 3)
+)
+
+type LivenessData struct {
+	// `true` when `livenessScore` reaches the decision threshold (62). Always present; `false` when the image was not evaluated.
+	IsLive *bool `json:"isLive,omitempty" url:"isLive,omitempty"`
+	// Fused anti-spoofing score, 0–100. Null when the image was not evaluated.
+	LivenessScore *int `json:"livenessScore,omitempty" url:"livenessScore,omitempty"`
+	// Distance of the score from the decision threshold: `HIGH` 25 points or more, `MEDIUM` 10 or more, `LOW` otherwise. Null when the image was not evaluated.
+	Confidence *LivenessDataConfidence `json:"confidence,omitempty" url:"confidence,omitempty"`
+	// Quality/attribute labels of the evaluated face — the largest face when `allowMultipleFaces` is true. Same shape as `matchFaces`. Null when the image was not evaluated or when face analysis was unavailable.
+	SelfieAnalysis *LivenessDataSelfieAnalysis `json:"selfieAnalysis,omitempty" url:"selfieAnalysis,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (l *LivenessData) GetIsLive() *bool {
+	if l == nil {
+		return nil
+	}
+	return l.IsLive
+}
+
+func (l *LivenessData) GetLivenessScore() *int {
+	if l == nil {
+		return nil
+	}
+	return l.LivenessScore
+}
+
+func (l *LivenessData) GetConfidence() *LivenessDataConfidence {
+	if l == nil {
+		return nil
+	}
+	return l.Confidence
+}
+
+func (l *LivenessData) GetSelfieAnalysis() *LivenessDataSelfieAnalysis {
+	if l == nil {
+		return nil
+	}
+	return l.SelfieAnalysis
+}
+
+func (l *LivenessData) GetExtraProperties() map[string]interface{} {
+	if l == nil {
+		return nil
+	}
+	return l.extraProperties
+}
+
+func (l *LivenessData) require(field *big.Int) {
+	if l.explicitFields == nil {
+		l.explicitFields = big.NewInt(0)
+	}
+	l.explicitFields.Or(l.explicitFields, field)
+}
+
+// SetIsLive sets the IsLive field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (l *LivenessData) SetIsLive(isLive *bool) {
+	l.IsLive = isLive
+	l.require(livenessDataFieldIsLive)
+}
+
+// SetLivenessScore sets the LivenessScore field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (l *LivenessData) SetLivenessScore(livenessScore *int) {
+	l.LivenessScore = livenessScore
+	l.require(livenessDataFieldLivenessScore)
+}
+
+// SetConfidence sets the Confidence field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (l *LivenessData) SetConfidence(confidence *LivenessDataConfidence) {
+	l.Confidence = confidence
+	l.require(livenessDataFieldConfidence)
+}
+
+// SetSelfieAnalysis sets the SelfieAnalysis field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (l *LivenessData) SetSelfieAnalysis(selfieAnalysis *LivenessDataSelfieAnalysis) {
+	l.SelfieAnalysis = selfieAnalysis
+	l.require(livenessDataFieldSelfieAnalysis)
+}
+
+func (l *LivenessData) UnmarshalJSON(data []byte) error {
+	type unmarshaler LivenessData
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*l = LivenessData(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *l)
+	if err != nil {
+		return err
+	}
+	l.extraProperties = extraProperties
+	l.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (l *LivenessData) MarshalJSON() ([]byte, error) {
+	type embed LivenessData
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*l),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, l.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
+func (l *LivenessData) String() string {
+	if l == nil {
+		return "<nil>"
+	}
+	if len(l.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(l.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(l); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", l)
+}
+
+// Distance of the score from the decision threshold: `HIGH` 25 points or more, `MEDIUM` 10 or more, `LOW` otherwise. Null when the image was not evaluated.
+type LivenessDataConfidence string
+
+const (
+	LivenessDataConfidenceHigh   LivenessDataConfidence = "HIGH"
+	LivenessDataConfidenceMedium LivenessDataConfidence = "MEDIUM"
+	LivenessDataConfidenceLow    LivenessDataConfidence = "LOW"
+)
+
+func NewLivenessDataConfidenceFromString(s string) (LivenessDataConfidence, error) {
+	switch s {
+	case "HIGH":
+		return LivenessDataConfidenceHigh, nil
+	case "MEDIUM":
+		return LivenessDataConfidenceMedium, nil
+	case "LOW":
+		return LivenessDataConfidenceLow, nil
+	}
+	var t LivenessDataConfidence
+	return "", fmt.Errorf("%s is not a valid %T", s, t)
+}
+
+func (l LivenessDataConfidence) Ptr() *LivenessDataConfidence {
+	return &l
+}
+
+// Quality/attribute labels of the evaluated face — the largest face when `allowMultipleFaces` is true. Same shape as `matchFaces`. Null when the image was not evaluated or when face analysis was unavailable.
+var (
+	livenessDataSelfieAnalysisFieldImageQuality        = big.NewInt(1 << 0)
+	livenessDataSelfieAnalysisFieldDetectionConfidence = big.NewInt(1 << 1)
+	livenessDataSelfieAnalysisFieldOrientation         = big.NewInt(1 << 2)
+	livenessDataSelfieAnalysisFieldEyesOpen            = big.NewInt(1 << 3)
+	livenessDataSelfieAnalysisFieldMouthOpen           = big.NewInt(1 << 4)
+	livenessDataSelfieAnalysisFieldWearingGlasses      = big.NewInt(1 << 5)
+	livenessDataSelfieAnalysisFieldWearingSunglasses   = big.NewInt(1 << 6)
+	livenessDataSelfieAnalysisFieldFaceCovered         = big.NewInt(1 << 7)
+	livenessDataSelfieAnalysisFieldIssues              = big.NewInt(1 << 8)
+)
+
+type LivenessDataSelfieAnalysis struct {
+	// `excellent`: brightness ≥ 75 and sharpness ≥ 75 · `good`: both ≥ 50 · `poor`: otherwise (in practice, usually a dark image rather than an out-of-focus one).
+	ImageQuality *LivenessDataSelfieAnalysisImageQuality `json:"imageQuality,omitempty" url:"imageQuality,omitempty"`
+	// Provider confidence that the detection is a face: `high` ≥ 95 · `medium` ≥ 80 · `low` below 80.
+	DetectionConfidence *LivenessDataSelfieAnalysisDetectionConfidence `json:"detectionConfidence,omitempty" url:"detectionConfidence,omitempty"`
+	// Evaluated in order, first match wins: `sideways` abs(yaw) ≥ 25° · `looking_left` yaw ≥ 10° · `looking_right` yaw ≤ −10° · `looking_up` pitch ≥ 20° · `looking_down` pitch ≤ −20° · `tilted` abs(roll) ≥ 15° · otherwise `front`.
+	Orientation *LivenessDataSelfieAnalysisOrientation `json:"orientation,omitempty" url:"orientation,omitempty"`
+	// Null when the attribute could not be determined.
+	EyesOpen *bool `json:"eyesOpen,omitempty" url:"eyesOpen,omitempty"`
+	// Informational; never produces an issue. Null when the attribute could not be determined.
+	MouthOpen *bool `json:"mouthOpen,omitempty" url:"mouthOpen,omitempty"`
+	// Null when the attribute could not be determined.
+	WearingGlasses *bool `json:"wearingGlasses,omitempty" url:"wearingGlasses,omitempty"`
+	// Null when the attribute could not be determined.
+	WearingSunglasses *bool `json:"wearingSunglasses,omitempty" url:"wearingSunglasses,omitempty"`
+	// Null when the attribute could not be determined.
+	FaceCovered *bool `json:"faceCovered,omitempty" url:"faceCovered,omitempty"`
+	// Every condition detected on the face; empty when none. All possible values: `poor_image_quality` (`imageQuality` is `poor`) · `not_facing_camera` (`orientation` is not `front`) · `eyes_closed` (`eyesOpen` is `false`) · `face_covered` (`faceCovered` is `true`) · `wearing_glasses` (`wearingGlasses` is `true`, informational) · `wearing_sunglasses` (`wearingSunglasses` is `true`) · `low_detection_confidence` (`detectionConfidence` is `low`). Retry hints, not rejection criteria.
+	Issues []LivenessDataSelfieAnalysisIssuesItem `json:"issues,omitempty" url:"issues,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (l *LivenessDataSelfieAnalysis) GetImageQuality() *LivenessDataSelfieAnalysisImageQuality {
+	if l == nil {
+		return nil
+	}
+	return l.ImageQuality
+}
+
+func (l *LivenessDataSelfieAnalysis) GetDetectionConfidence() *LivenessDataSelfieAnalysisDetectionConfidence {
+	if l == nil {
+		return nil
+	}
+	return l.DetectionConfidence
+}
+
+func (l *LivenessDataSelfieAnalysis) GetOrientation() *LivenessDataSelfieAnalysisOrientation {
+	if l == nil {
+		return nil
+	}
+	return l.Orientation
+}
+
+func (l *LivenessDataSelfieAnalysis) GetEyesOpen() *bool {
+	if l == nil {
+		return nil
+	}
+	return l.EyesOpen
+}
+
+func (l *LivenessDataSelfieAnalysis) GetMouthOpen() *bool {
+	if l == nil {
+		return nil
+	}
+	return l.MouthOpen
+}
+
+func (l *LivenessDataSelfieAnalysis) GetWearingGlasses() *bool {
+	if l == nil {
+		return nil
+	}
+	return l.WearingGlasses
+}
+
+func (l *LivenessDataSelfieAnalysis) GetWearingSunglasses() *bool {
+	if l == nil {
+		return nil
+	}
+	return l.WearingSunglasses
+}
+
+func (l *LivenessDataSelfieAnalysis) GetFaceCovered() *bool {
+	if l == nil {
+		return nil
+	}
+	return l.FaceCovered
+}
+
+func (l *LivenessDataSelfieAnalysis) GetIssues() []LivenessDataSelfieAnalysisIssuesItem {
+	if l == nil {
+		return nil
+	}
+	return l.Issues
+}
+
+func (l *LivenessDataSelfieAnalysis) GetExtraProperties() map[string]interface{} {
+	if l == nil {
+		return nil
+	}
+	return l.extraProperties
+}
+
+func (l *LivenessDataSelfieAnalysis) require(field *big.Int) {
+	if l.explicitFields == nil {
+		l.explicitFields = big.NewInt(0)
+	}
+	l.explicitFields.Or(l.explicitFields, field)
+}
+
+// SetImageQuality sets the ImageQuality field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (l *LivenessDataSelfieAnalysis) SetImageQuality(imageQuality *LivenessDataSelfieAnalysisImageQuality) {
+	l.ImageQuality = imageQuality
+	l.require(livenessDataSelfieAnalysisFieldImageQuality)
+}
+
+// SetDetectionConfidence sets the DetectionConfidence field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (l *LivenessDataSelfieAnalysis) SetDetectionConfidence(detectionConfidence *LivenessDataSelfieAnalysisDetectionConfidence) {
+	l.DetectionConfidence = detectionConfidence
+	l.require(livenessDataSelfieAnalysisFieldDetectionConfidence)
+}
+
+// SetOrientation sets the Orientation field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (l *LivenessDataSelfieAnalysis) SetOrientation(orientation *LivenessDataSelfieAnalysisOrientation) {
+	l.Orientation = orientation
+	l.require(livenessDataSelfieAnalysisFieldOrientation)
+}
+
+// SetEyesOpen sets the EyesOpen field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (l *LivenessDataSelfieAnalysis) SetEyesOpen(eyesOpen *bool) {
+	l.EyesOpen = eyesOpen
+	l.require(livenessDataSelfieAnalysisFieldEyesOpen)
+}
+
+// SetMouthOpen sets the MouthOpen field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (l *LivenessDataSelfieAnalysis) SetMouthOpen(mouthOpen *bool) {
+	l.MouthOpen = mouthOpen
+	l.require(livenessDataSelfieAnalysisFieldMouthOpen)
+}
+
+// SetWearingGlasses sets the WearingGlasses field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (l *LivenessDataSelfieAnalysis) SetWearingGlasses(wearingGlasses *bool) {
+	l.WearingGlasses = wearingGlasses
+	l.require(livenessDataSelfieAnalysisFieldWearingGlasses)
+}
+
+// SetWearingSunglasses sets the WearingSunglasses field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (l *LivenessDataSelfieAnalysis) SetWearingSunglasses(wearingSunglasses *bool) {
+	l.WearingSunglasses = wearingSunglasses
+	l.require(livenessDataSelfieAnalysisFieldWearingSunglasses)
+}
+
+// SetFaceCovered sets the FaceCovered field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (l *LivenessDataSelfieAnalysis) SetFaceCovered(faceCovered *bool) {
+	l.FaceCovered = faceCovered
+	l.require(livenessDataSelfieAnalysisFieldFaceCovered)
+}
+
+// SetIssues sets the Issues field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (l *LivenessDataSelfieAnalysis) SetIssues(issues []LivenessDataSelfieAnalysisIssuesItem) {
+	l.Issues = issues
+	l.require(livenessDataSelfieAnalysisFieldIssues)
+}
+
+func (l *LivenessDataSelfieAnalysis) UnmarshalJSON(data []byte) error {
+	type unmarshaler LivenessDataSelfieAnalysis
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*l = LivenessDataSelfieAnalysis(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *l)
+	if err != nil {
+		return err
+	}
+	l.extraProperties = extraProperties
+	l.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (l *LivenessDataSelfieAnalysis) MarshalJSON() ([]byte, error) {
+	type embed LivenessDataSelfieAnalysis
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*l),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, l.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
+func (l *LivenessDataSelfieAnalysis) String() string {
+	if l == nil {
+		return "<nil>"
+	}
+	if len(l.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(l.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(l); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", l)
+}
+
+// Provider confidence that the detection is a face: `high` ≥ 95 · `medium` ≥ 80 · `low` below 80.
+type LivenessDataSelfieAnalysisDetectionConfidence string
+
+const (
+	LivenessDataSelfieAnalysisDetectionConfidenceHigh   LivenessDataSelfieAnalysisDetectionConfidence = "high"
+	LivenessDataSelfieAnalysisDetectionConfidenceMedium LivenessDataSelfieAnalysisDetectionConfidence = "medium"
+	LivenessDataSelfieAnalysisDetectionConfidenceLow    LivenessDataSelfieAnalysisDetectionConfidence = "low"
+)
+
+func NewLivenessDataSelfieAnalysisDetectionConfidenceFromString(s string) (LivenessDataSelfieAnalysisDetectionConfidence, error) {
+	switch s {
+	case "high":
+		return LivenessDataSelfieAnalysisDetectionConfidenceHigh, nil
+	case "medium":
+		return LivenessDataSelfieAnalysisDetectionConfidenceMedium, nil
+	case "low":
+		return LivenessDataSelfieAnalysisDetectionConfidenceLow, nil
+	}
+	var t LivenessDataSelfieAnalysisDetectionConfidence
+	return "", fmt.Errorf("%s is not a valid %T", s, t)
+}
+
+func (l LivenessDataSelfieAnalysisDetectionConfidence) Ptr() *LivenessDataSelfieAnalysisDetectionConfidence {
+	return &l
+}
+
+// `excellent`: brightness ≥ 75 and sharpness ≥ 75 · `good`: both ≥ 50 · `poor`: otherwise (in practice, usually a dark image rather than an out-of-focus one).
+type LivenessDataSelfieAnalysisImageQuality string
+
+const (
+	LivenessDataSelfieAnalysisImageQualityExcellent LivenessDataSelfieAnalysisImageQuality = "excellent"
+	LivenessDataSelfieAnalysisImageQualityGood      LivenessDataSelfieAnalysisImageQuality = "good"
+	LivenessDataSelfieAnalysisImageQualityPoor      LivenessDataSelfieAnalysisImageQuality = "poor"
+)
+
+func NewLivenessDataSelfieAnalysisImageQualityFromString(s string) (LivenessDataSelfieAnalysisImageQuality, error) {
+	switch s {
+	case "excellent":
+		return LivenessDataSelfieAnalysisImageQualityExcellent, nil
+	case "good":
+		return LivenessDataSelfieAnalysisImageQualityGood, nil
+	case "poor":
+		return LivenessDataSelfieAnalysisImageQualityPoor, nil
+	}
+	var t LivenessDataSelfieAnalysisImageQuality
+	return "", fmt.Errorf("%s is not a valid %T", s, t)
+}
+
+func (l LivenessDataSelfieAnalysisImageQuality) Ptr() *LivenessDataSelfieAnalysisImageQuality {
+	return &l
+}
+
+type LivenessDataSelfieAnalysisIssuesItem string
+
+const (
+	LivenessDataSelfieAnalysisIssuesItemWearingGlasses         LivenessDataSelfieAnalysisIssuesItem = "wearing_glasses"
+	LivenessDataSelfieAnalysisIssuesItemWearingSunglasses      LivenessDataSelfieAnalysisIssuesItem = "wearing_sunglasses"
+	LivenessDataSelfieAnalysisIssuesItemFaceCovered            LivenessDataSelfieAnalysisIssuesItem = "face_covered"
+	LivenessDataSelfieAnalysisIssuesItemEyesClosed             LivenessDataSelfieAnalysisIssuesItem = "eyes_closed"
+	LivenessDataSelfieAnalysisIssuesItemPoorImageQuality       LivenessDataSelfieAnalysisIssuesItem = "poor_image_quality"
+	LivenessDataSelfieAnalysisIssuesItemNotFacingCamera        LivenessDataSelfieAnalysisIssuesItem = "not_facing_camera"
+	LivenessDataSelfieAnalysisIssuesItemLowDetectionConfidence LivenessDataSelfieAnalysisIssuesItem = "low_detection_confidence"
+)
+
+func NewLivenessDataSelfieAnalysisIssuesItemFromString(s string) (LivenessDataSelfieAnalysisIssuesItem, error) {
+	switch s {
+	case "wearing_glasses":
+		return LivenessDataSelfieAnalysisIssuesItemWearingGlasses, nil
+	case "wearing_sunglasses":
+		return LivenessDataSelfieAnalysisIssuesItemWearingSunglasses, nil
+	case "face_covered":
+		return LivenessDataSelfieAnalysisIssuesItemFaceCovered, nil
+	case "eyes_closed":
+		return LivenessDataSelfieAnalysisIssuesItemEyesClosed, nil
+	case "poor_image_quality":
+		return LivenessDataSelfieAnalysisIssuesItemPoorImageQuality, nil
+	case "not_facing_camera":
+		return LivenessDataSelfieAnalysisIssuesItemNotFacingCamera, nil
+	case "low_detection_confidence":
+		return LivenessDataSelfieAnalysisIssuesItemLowDetectionConfidence, nil
+	}
+	var t LivenessDataSelfieAnalysisIssuesItem
+	return "", fmt.Errorf("%s is not a valid %T", s, t)
+}
+
+func (l LivenessDataSelfieAnalysisIssuesItem) Ptr() *LivenessDataSelfieAnalysisIssuesItem {
+	return &l
+}
+
+// Evaluated in order, first match wins: `sideways` abs(yaw) ≥ 25° · `looking_left` yaw ≥ 10° · `looking_right` yaw ≤ −10° · `looking_up` pitch ≥ 20° · `looking_down` pitch ≤ −20° · `tilted` abs(roll) ≥ 15° · otherwise `front`.
+type LivenessDataSelfieAnalysisOrientation string
+
+const (
+	LivenessDataSelfieAnalysisOrientationFront        LivenessDataSelfieAnalysisOrientation = "front"
+	LivenessDataSelfieAnalysisOrientationLookingLeft  LivenessDataSelfieAnalysisOrientation = "looking_left"
+	LivenessDataSelfieAnalysisOrientationLookingRight LivenessDataSelfieAnalysisOrientation = "looking_right"
+	LivenessDataSelfieAnalysisOrientationLookingUp    LivenessDataSelfieAnalysisOrientation = "looking_up"
+	LivenessDataSelfieAnalysisOrientationLookingDown  LivenessDataSelfieAnalysisOrientation = "looking_down"
+	LivenessDataSelfieAnalysisOrientationTilted       LivenessDataSelfieAnalysisOrientation = "tilted"
+	LivenessDataSelfieAnalysisOrientationSideways     LivenessDataSelfieAnalysisOrientation = "sideways"
+)
+
+func NewLivenessDataSelfieAnalysisOrientationFromString(s string) (LivenessDataSelfieAnalysisOrientation, error) {
+	switch s {
+	case "front":
+		return LivenessDataSelfieAnalysisOrientationFront, nil
+	case "looking_left":
+		return LivenessDataSelfieAnalysisOrientationLookingLeft, nil
+	case "looking_right":
+		return LivenessDataSelfieAnalysisOrientationLookingRight, nil
+	case "looking_up":
+		return LivenessDataSelfieAnalysisOrientationLookingUp, nil
+	case "looking_down":
+		return LivenessDataSelfieAnalysisOrientationLookingDown, nil
+	case "tilted":
+		return LivenessDataSelfieAnalysisOrientationTilted, nil
+	case "sideways":
+		return LivenessDataSelfieAnalysisOrientationSideways, nil
+	}
+	var t LivenessDataSelfieAnalysisOrientation
+	return "", fmt.Errorf("%s is not a valid %T", s, t)
+}
+
+func (l LivenessDataSelfieAnalysisOrientation) Ptr() *LivenessDataSelfieAnalysisOrientation {
+	return &l
+}
+
+var (
+	checkLivenessResponseFieldData          = big.NewInt(1 << 0)
+	checkLivenessResponseFieldStatus        = big.NewInt(1 << 1)
+	checkLivenessResponseFieldType          = big.NewInt(1 << 2)
+	checkLivenessResponseFieldMessage       = big.NewInt(1 << 3)
+	checkLivenessResponseFieldErrors        = big.NewInt(1 << 4)
+	checkLivenessResponseFieldTransactionID = big.NewInt(1 << 5)
+	checkLivenessResponseFieldProcessedAt   = big.NewInt(1 << 6)
+	checkLivenessResponseFieldBillable      = big.NewInt(1 << 7)
+)
+
+type CheckLivenessResponse struct {
+	Data   *LivenessData  `json:"data,omitempty" url:"data,omitempty"`
+	Status EnvelopeStatus `json:"status" url:"status"`
+	// Stable result type code. Includes generic codes (`SUCCESS`, `INVALID_REQUEST`, `UNAUTHORIZED`, `SERVICE_UNAVAILABLE`, `INTERNAL_ERROR`, `RATE_LIMIT_EXCEEDED`) plus endpoint-specific result codes — see this endpoint's response examples.
+	Type string `json:"type" url:"type"`
+	// Human-readable summary of the result. Always in English (per Language Conventions in the API overview).
+	Message string `json:"message" url:"message"`
+	// Per-field error details. Present only on `INVALID_REQUEST` responses.
+	Errors []*ErrorDetail `json:"errors,omitempty" url:"errors,omitempty"`
+	// Unique identifier of this request, generated by the API Gateway. Propagated end-to-end for traceability.
+	TransactionID string `json:"transactionId" url:"transactionId"`
+	// ISO 8601 datetime with Mexico City offset (`-06:00`). Always set by the API Gateway when the response leaves the system.
+	ProcessedAt time.Time `json:"processedAt" url:"processedAt"`
+	// Whether this request will be charged against the client's plan. Typically `true` for successful business results and `false` for validation errors or system errors that prevented processing.
+	Billable bool `json:"billable" url:"billable"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (c *CheckLivenessResponse) GetData() *LivenessData {
+	if c == nil {
+		return nil
+	}
+	return c.Data
+}
+
+func (c *CheckLivenessResponse) GetStatus() EnvelopeStatus {
+	if c == nil {
+		return ""
+	}
+	return c.Status
+}
+
+func (c *CheckLivenessResponse) GetType() string {
+	if c == nil {
+		return ""
+	}
+	return c.Type
+}
+
+func (c *CheckLivenessResponse) GetMessage() string {
+	if c == nil {
+		return ""
+	}
+	return c.Message
+}
+
+func (c *CheckLivenessResponse) GetErrors() []*ErrorDetail {
+	if c == nil {
+		return nil
+	}
+	return c.Errors
+}
+
+func (c *CheckLivenessResponse) GetTransactionID() string {
+	if c == nil {
+		return ""
+	}
+	return c.TransactionID
+}
+
+func (c *CheckLivenessResponse) GetProcessedAt() time.Time {
+	if c == nil {
+		return time.Time{}
+	}
+	return c.ProcessedAt
+}
+
+func (c *CheckLivenessResponse) GetBillable() bool {
+	if c == nil {
+		return false
+	}
+	return c.Billable
+}
+
+func (c *CheckLivenessResponse) GetExtraProperties() map[string]interface{} {
+	if c == nil {
+		return nil
+	}
+	return c.extraProperties
+}
+
+func (c *CheckLivenessResponse) require(field *big.Int) {
+	if c.explicitFields == nil {
+		c.explicitFields = big.NewInt(0)
+	}
+	c.explicitFields.Or(c.explicitFields, field)
+}
+
+// SetData sets the Data field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CheckLivenessResponse) SetData(data *LivenessData) {
+	c.Data = data
+	c.require(checkLivenessResponseFieldData)
+}
+
+// SetStatus sets the Status field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CheckLivenessResponse) SetStatus(status EnvelopeStatus) {
+	c.Status = status
+	c.require(checkLivenessResponseFieldStatus)
+}
+
+// SetType sets the Type field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CheckLivenessResponse) SetType(type_ string) {
+	c.Type = type_
+	c.require(checkLivenessResponseFieldType)
+}
+
+// SetMessage sets the Message field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CheckLivenessResponse) SetMessage(message string) {
+	c.Message = message
+	c.require(checkLivenessResponseFieldMessage)
+}
+
+// SetErrors sets the Errors field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CheckLivenessResponse) SetErrors(errors []*ErrorDetail) {
+	c.Errors = errors
+	c.require(checkLivenessResponseFieldErrors)
+}
+
+// SetTransactionID sets the TransactionID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CheckLivenessResponse) SetTransactionID(transactionID string) {
+	c.TransactionID = transactionID
+	c.require(checkLivenessResponseFieldTransactionID)
+}
+
+// SetProcessedAt sets the ProcessedAt field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CheckLivenessResponse) SetProcessedAt(processedAt time.Time) {
+	c.ProcessedAt = processedAt
+	c.require(checkLivenessResponseFieldProcessedAt)
+}
+
+// SetBillable sets the Billable field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CheckLivenessResponse) SetBillable(billable bool) {
+	c.Billable = billable
+	c.require(checkLivenessResponseFieldBillable)
+}
+
+func (c *CheckLivenessResponse) UnmarshalJSON(data []byte) error {
+	type embed CheckLivenessResponse
+	var unmarshaler = struct {
+		embed
+		ProcessedAt *internal.DateTime `json:"processedAt"`
+	}{
+		embed: embed(*c),
+	}
+	if err := json.Unmarshal(data, &unmarshaler); err != nil {
+		return err
+	}
+	*c = CheckLivenessResponse(unmarshaler.embed)
+	c.ProcessedAt = unmarshaler.ProcessedAt.Time()
+	extraProperties, err := internal.ExtractExtraProperties(data, *c)
+	if err != nil {
+		return err
+	}
+	c.extraProperties = extraProperties
+	c.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (c *CheckLivenessResponse) MarshalJSON() ([]byte, error) {
+	type embed CheckLivenessResponse
+	var marshaler = struct {
+		embed
+		ProcessedAt *internal.DateTime `json:"processedAt"`
+	}{
+		embed:       embed(*c),
+		ProcessedAt: internal.NewDateTime(c.ProcessedAt),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, c.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
+func (c *CheckLivenessResponse) String() string {
+	if c == nil {
+		return "<nil>"
+	}
+	if len(c.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(c.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(c); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", c)
 }
 
 // Optional. Use a specific type (e.g. `INE`, `MEX_PASSPORT`) for strict validation against that exact document type. Use `ANY` to require the image be some recognized ID (auto-detected) — returns `NO_DOCUMENT_DETECTED` if not. Omit it to skip document validation.

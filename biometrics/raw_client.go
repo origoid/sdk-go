@@ -80,7 +80,7 @@ func (r *RawClient) CheckLiveness(
 	ctx context.Context,
 	request *sdkgo.CheckLivenessRequest,
 	opts ...option.RequestOption,
-) (*core.Response[*sdkgo.Envelope], error) {
+) (*core.Response[*sdkgo.CheckLivenessResponse], error) {
 	options := core.NewRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
@@ -93,7 +93,7 @@ func (r *RawClient) CheckLiveness(
 		options.ToHeader(),
 	)
 	headers.Add("Content-Type", "application/json")
-	var response *sdkgo.Envelope
+	var response *sdkgo.CheckLivenessResponse
 	raw, err := r.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -113,7 +113,7 @@ func (r *RawClient) CheckLiveness(
 	if err != nil {
 		return nil, err
 	}
-	return &core.Response[*sdkgo.Envelope]{
+	return &core.Response[*sdkgo.CheckLivenessResponse]{
 		StatusCode: raw.StatusCode,
 		Header:     raw.Header,
 		Body:       response,

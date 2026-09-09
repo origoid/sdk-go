@@ -342,8 +342,8 @@
       }
     },
     {
-      "id": "11fd6166-e543-45f1-80d2-d78dccfffe4f",
-      "name": "Passive Liveness Detection - Live (real person)",
+      "id": "3a69acbf-7b70-436f-93cc-e87a67ef6459",
+      "name": "Liveness Detection - Live person",
       "request": {
         "urlPathTemplate": "/global/biometrics/v1/liveness-checks",
         "method": "POST",
@@ -355,12 +355,12 @@
       },
       "response": {
         "status": 200,
-        "body": "{\n  \"status\": \"OK\",\n  \"type\": \"SUCCESS\",\n  \"message\": \"Liveness check completed\",\n  \"data\": {\n    \"isLive\": true,\n    \"livenessScore\": 94,\n    \"confidence\": \"HIGH\",\n    \"attackTypes\": {\n      \"key\": \"value\"\n    }\n  },\n  \"errors\": [\n    {\n      \"field\": \"field\",\n      \"code\": \"code\",\n      \"message\": \"message\"\n    }\n  ],\n  \"transactionId\": \"442133b3-5177-4033-a3bc-d643768d5449\",\n  \"processedAt\": \"2024-01-15T09:30:00Z\",\n  \"billable\": true\n}",
+        "body": "{\n  \"status\": \"OK\",\n  \"type\": \"SUCCESS\",\n  \"message\": \"Liveness check completed\",\n  \"data\": {\n    \"isLive\": true,\n    \"livenessScore\": 98,\n    \"confidence\": \"HIGH\",\n    \"selfieAnalysis\": {\n      \"imageQuality\": \"excellent\",\n      \"detectionConfidence\": \"high\",\n      \"orientation\": \"front\",\n      \"eyesOpen\": true,\n      \"mouthOpen\": false,\n      \"wearingGlasses\": false,\n      \"wearingSunglasses\": false,\n      \"faceCovered\": false,\n      \"issues\": [\n        \"wearing_glasses\"\n      ]\n    }\n  },\n  \"errors\": [\n    {\n      \"field\": \"field\",\n      \"code\": \"code\",\n      \"message\": \"message\"\n    }\n  ],\n  \"transactionId\": \"f2da936b-4e13-47e9-8696-8f3526cf03fd\",\n  \"processedAt\": \"2024-01-15T09:30:00Z\",\n  \"billable\": true\n}",
         "headers": {
           "Content-Type": "application/json"
         }
       },
-      "uuid": "11fd6166-e543-45f1-80d2-d78dccfffe4f",
+      "uuid": "3a69acbf-7b70-436f-93cc-e87a67ef6459",
       "persistent": true,
       "priority": 3,
       "metadata": {
