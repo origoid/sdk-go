@@ -1,205 +1,61 @@
-# Origoid Go Library
+# OrigoID Go Library
 
-[![fern shield](https://img.shields.io/badge/%F0%9F%8C%BF-Built%20with%20Fern-brightgreen)](https://buildwithfern.com?utm_source=github&utm_medium=github&utm_campaign=readme&utm_source=Origoid%2FGo)
+[![Go Reference](https://pkg.go.dev/badge/github.com/origoid/sdk-go.svg)](https://pkg.go.dev/github.com/origoid/sdk-go)
 
-The Origoid Go library provides convenient access to the Origoid APIs from Go.
+Official SDK for OrigoID, a REST API for identity verification in Mexico. Validate a CURP against RENAPO, check an INE voter credential against the voter list (Lista Nominal), extract data from the INE card, validate RFC, tax status certificates (CSF) and CFDI invoices at SAT, look up an NSS at IMSS, screen against OFAC, PEPs and SAT 69 / 69-B lists, and compare faces. Every response uses the same envelope, so integration is a switch on `Type`. Zero data retention: each request is validated, answered and discarded.
 
-## Table of Contents
+**En español** — SDK oficial de OrigoID para verificación de identidad en México: validar CURP en RENAPO, vigencia de la credencial de elector en la Lista Nominal del INE, OCR de INE, RFC, Constancia de Situación Fiscal y CFDI en el SAT, NSS en el IMSS, búsqueda en OFAC, PEPs y listas SAT 69 y 69-B, y comparación facial. Cero retención de datos. Guías: [Validar CURP](https://origoid.com/validar-curp.html) · [Validar INE / Lista Nominal](https://origoid.com/validar-ine.html) · [OCR de INE](https://origoid.com/ocr-ine.html) · [Validar RFC](https://origoid.com/validar-rfc.html) · [Comparación facial](https://origoid.com/comparacion-facial.html) · [Documentación](https://docs.origoid.com) · [Estatus](https://status.origoid.com)
 
-- [Reference](#reference)
-- [Usage](#usage)
-- [Environments](#environments)
-- [Errors](#errors)
-- [Request Options](#request-options)
-- [Advanced](#advanced)
-  - [Response Headers](#response-headers)
-  - [Retries](#retries)
-  - [Timeouts](#timeouts)
-  - [Explicit Null](#explicit-null)
-- [Contributing](#contributing)
+## Documentation
 
-## Reference
+API reference documentation is available at [docs.origoid.com](https://docs.origoid.com). Go reference: [pkg.go.dev/github.com/origoid/sdk-go](https://pkg.go.dev/github.com/origoid/sdk-go).
 
-A full reference for this library is available [here](./reference.md).
+## Installation
+
+```sh
+go get github.com/origoid/sdk-go
+```
 
 ## Usage
 
-Instantiate and use the client with the following:
-
 ```go
-package example
+package main
 
 import (
-    context "context"
+	"context"
+	"fmt"
+	"log"
 
-    sdkgo "github.com/origoid/sdk-go"
-    client "github.com/origoid/sdk-go/client"
-    option "github.com/origoid/sdk-go/option"
+	origoid "github.com/origoid/sdk-go"
+	"github.com/origoid/sdk-go/client"
+	"github.com/origoid/sdk-go/option"
 )
 
-func do() {
-    client := client.NewClient(
-        option.WithAPIKey(
-            "<value>",
-        ),
-    )
-    request := &sdkgo.IssueTokenRequest{}
-    client.Authentication.IssueToken(
-        context.TODO(),
-        request,
-    )
+func main() {
+	c := client.NewClient(option.WithAPIKey("YOUR_API_KEY"))
+
+	res, err := c.Renapo.ValidateCurp(context.Background(), &origoid.ValidateCurpRequest{
+		Curp: "TEST900101HDFRRN09",
+	})
+	if err != nil {
+		log.Fatal(err)
+	}
+	fmt.Println(res.Status, res.Type) // OK SUCCESS
 }
 ```
 
-## Environments
-
-You can choose between different environments by using the `option.WithBaseURL` option. You can configure any arbitrary base
-URL, which is particularly useful in test environments.
-
-```go
-client := client.NewClient(
-    option.WithBaseURL(api.Environments.Default),
-)
-```
+Every endpoint returns the OrigoID envelope: `Status` (`OK` | `ERROR`), `Type` (result code such as `SUCCESS`, `CURP_NOT_FOUND`, `INVALID_REQUEST`), `Message`, `Data`, `TransactionId`, `ProcessedAt` and `Billable`. Branch on `Type`; `ERROR` responses are never billed.
 
 ## Errors
 
-Structured error types are returned from API calls that return non-success status codes. These errors are compatible
-with the `errors.Is` and `errors.As` APIs, so you can access the error like so:
+Transport and HTTP-level failures are returned as `error`. API outcomes (including `INVALID_REQUEST`, `UNAUTHORIZED` and `RATE_LIMIT_EXCEEDED`) arrive in the envelope. See the [API reference](https://docs.origoid.com) for every endpoint's result types.
 
-```go
-response, err := client.Authentication.IssueToken(...)
-if err != nil {
-    var apiError *core.APIError
-    if errors.As(err, apiError) {
-        // Do something with the API error ...
-    }
-    return err
-}
-```
+## Support
 
-## Request Options
-
-A variety of request options are included to adapt the behavior of the library, which includes configuring
-authorization tokens, or providing your own instrumented `*http.Client`.
-
-These request options can either be
-specified on the client so that they're applied on every request, or for an individual request, like so:
-
-> Providing your own `*http.Client` is recommended. Otherwise, the `http.DefaultClient` will be used,
-> and your client will wait indefinitely for a response (unless the per-request, context-based timeout
-> is used).
-
-```go
-// Specify default options applied on every request.
-client := client.NewClient(
-    option.WithToken("<YOUR_API_KEY>"),
-    option.WithHTTPClient(
-        &http.Client{
-            Timeout: 5 * time.Second,
-        },
-    ),
-)
-
-// Specify options for an individual request.
-response, err := client.Authentication.IssueToken(
-    ...,
-    option.WithToken("<YOUR_API_KEY>"),
-)
-```
-
-## Advanced
-
-### Response Headers
-
-You can access the raw HTTP response data by using the `WithRawResponse` field on the client. This is useful
-when you need to examine the response headers received from the API call. (When the endpoint is paginated,
-the raw HTTP response data will be included automatically in the Page response object.)
-
-```go
-response, err := client.Authentication.WithRawResponse.IssueToken(...)
-if err != nil {
-    return err
-}
-fmt.Printf("Got response headers: %v", response.Header)
-fmt.Printf("Got status code: %d", response.StatusCode)
-```
-
-### Retries
-
-The SDK is instrumented with automatic retries with exponential backoff. A request will be retried as long
-as the request is deemed retryable and the number of retry attempts has not grown larger than the configured
-retry limit (default: 2).
-
-Which status codes are retried depends on the `retryStatusCodes` generator configuration:
-
-**`legacy`** (current default): retries on
-- [408](https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/408) (Timeout)
-- [429](https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/429) (Too Many Requests)
-- [5XX](https://developer.mozilla.org/en-US/docs/Web/HTTP/Status#server_error_responses) (All server errors, including 500)
-
-**`recommended`**: retries on
-- [408](https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/408) (Timeout)
-- [429](https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/429) (Too Many Requests)
-- [502](https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/502) (Bad Gateway)
-- [503](https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/503) (Service Unavailable)
-- [504](https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/504) (Gateway Timeout)
-
-If the `Retry-After` header is present in the response, the SDK will prioritize respecting its value exactly
-over the default exponential backoff.
-
-Use the `option.WithMaxAttempts` option to configure this behavior for the entire client or an individual request:
-
-```go
-client := client.NewClient(
-    option.WithMaxAttempts(1),
-)
-
-response, err := client.Authentication.IssueToken(
-    ...,
-    option.WithMaxAttempts(1),
-)
-```
-
-### Timeouts
-
-Setting a timeout for each individual request is as simple as using the standard context library. Setting a one second timeout for an individual API call looks like the following:
-
-```go
-ctx, cancel := context.WithTimeout(ctx, time.Second)
-defer cancel()
-
-response, err := client.Authentication.IssueToken(ctx, ...)
-```
-
-### Explicit Null
-
-If you want to send the explicit `null` JSON value through an optional parameter, you can use the setters\
-that come with every object. Calling a setter method for a property will flip a bit in the `explicitFields`
-bitfield for that setter's object; during serialization, any property with a flipped bit will have its
-omittable status stripped, so zero or `nil` values will be sent explicitly rather than omitted altogether:
-
-```go
-type ExampleRequest struct {
-    // An optional string parameter.
-    Name *string `json:"name,omitempty" url:"-"`
-
-    // Private bitmask of fields set to an explicit value and therefore not to be omitted
-    explicitFields *big.Int `json:"-" url:"-"`
-}
-
-request := &ExampleRequest{}
-request.SetName(nil)
-
-response, err := client.Authentication.IssueToken(ctx, request, ...)
-```
+- Documentation: https://docs.origoid.com
+- Status: https://status.origoid.com
+- Email: support@origoid.com
 
 ## Contributing
 
-While we value open-source contributions to this SDK, this library is generated programmatically.
-Additions made directly to this library would have to be moved over to our generation code,
-otherwise they would be overwritten upon the next generated release. Feel free to open a PR as
-a proof of concept, but know that we will not be able to merge it as-is. We suggest opening
-an issue first to discuss with us!
-
-On the other hand, contributions to the README are always very welcome!
+This SDK is generated from the OrigoID OpenAPI specification. Changes to the generated code are overwritten on the next release — open an issue or contact support@origoid.com instead of a pull request.

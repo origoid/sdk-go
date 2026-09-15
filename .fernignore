@@ -2,3 +2,6 @@
 
 # Preserve CI (WireMock setup for generated tests).
 .github/workflows/ci.yml
+
+# README is maintained by hand (Go is generated locally; Fern must not overwrite it)
+README.md
