@@ -156,6 +156,37 @@
       }
     },
     {
+      "id": "afc15dec-6ddf-4f8e-9326-4438a393fb1f",
+      "name": "Get NSS (Async) - Accepted",
+      "request": {
+        "urlPathTemplate": "/mex/social-security/v1/imss-nss-lookup-async",
+        "method": "POST",
+        "headers": {
+          "x-api-key": {
+            "matches": ".+"
+          }
+        }
+      },
+      "response": {
+        "status": 200,
+        "body": "{\n  \"status\": \"OK\",\n  \"type\": \"ACCEPTED\",\n  \"message\": \"Request accepted, result will be sent to the webhook\",\n  \"errors\": [\n    {\n      \"field\": \"field\",\n      \"code\": \"code\",\n      \"message\": \"message\"\n    }\n  ],\n  \"transactionId\": \"39b972d3-20a8-539a-acfb-70657588df9b\",\n  \"processedAt\": \"2024-01-15T09:30:00Z\",\n  \"billable\": false\n}",
+        "headers": {
+          "Content-Type": "application/json"
+        }
+      },
+      "uuid": "afc15dec-6ddf-4f8e-9326-4438a393fb1f",
+      "persistent": true,
+      "priority": 3,
+      "metadata": {
+        "mocklab": {
+          "created": {
+            "at": "2020-01-01T00:00:00.000Z",
+            "via": "SYSTEM"
+          }
+        }
+      }
+    },
+    {
       "id": "944a5d45-3c02-4ac1-a28d-dd8c2dd453e6",
       "name": "Employment Status - Active Employment",
       "request": {
@@ -169,12 +200,105 @@
       },
       "response": {
         "status": 200,
-        "body": "{\n  \"status\": \"OK\",\n  \"type\": \"SUCCESS\",\n  \"message\": \"Active employment found\",\n  \"data\": {\n    \"nss\": \"92038109713\",\n    \"personalInfo\": {\n      \"curp\": \"GARM900101HDFRZA01\",\n      \"givenNames\": \"SANTIAGO FORTINO\",\n      \"firstSurname\": \"ESPINOZA\",\n      \"secondSurname\": \"SANCHEZ\",\n      \"gender\": \"H\"\n    },\n    \"employmentInformation\": [\n      {\n        \"employerRegistration\": \"Y5473416\",\n        \"modality\": \"10\",\n        \"employerRfc\": \"FDM020722442\",\n        \"employerName\": \"LOGISTICA GLOBAL DE MEXICO S DE RL DE CV\",\n        \"state\": \"CIUDAD DE MEXICO\",\n        \"stateCode\": \"09\",\n        \"baseSalary\": {\n          \"amount\": \"2932.75\",\n          \"currency\": \"MXN\"\n        },\n        \"contributedDays\": 28\n      }\n    ],\n    \"reportDetails\": {\n      \"reportPeriod\": \"2026-02\",\n      \"issueDate\": \"2026-03-15\"\n    }\n  },\n  \"errors\": [\n    {\n      \"field\": \"field\",\n      \"code\": \"code\",\n      \"message\": \"message\"\n    }\n  ],\n  \"transactionId\": \"26aca817-9a02-4119-bc06-2fcab3666454\",\n  \"processedAt\": \"2024-01-15T09:30:00Z\",\n  \"billable\": true\n}",
+        "body": "{\n  \"status\": \"OK\",\n  \"type\": \"SUCCESS\",\n  \"message\": \"Active employment found\",\n  \"data\": {\n    \"nss\": \"92038109713\",\n    \"personalInfo\": {\n      \"curp\": \"GARM900101HDFRZA01\",\n      \"givenNames\": \"SANTIAGO FORTINO\",\n      \"firstSurname\": \"ESPINOZA\",\n      \"secondSurname\": \"SANCHEZ\",\n      \"gender\": \"H\"\n    },\n    \"employmentInformation\": [\n      {\n        \"employerRegistration\": \"Y5473416\",\n        \"modality\": \"10\",\n        \"employerRfc\": \"FDM020722442\",\n        \"employerName\": \"LOGISTICA GLOBAL DE MEXICO S DE RL DE CV\",\n        \"state\": \"CIUDAD DE MEXICO\",\n        \"stateCode\": \"09\",\n        \"baseSalary\": {\n          \"amount\": \"2932.75\",\n          \"currency\": \"MXN\"\n        },\n        \"contributedDays\": 28\n      }\n    ],\n    \"reportDetails\": {\n      \"reportPeriod\": \"2026-02\",\n      \"issueDate\": \"2026-03-15\",\n      \"currentMonth\": \"2026-03\",\n      \"nextReportMonth\": \"2026-04\"\n    }\n  },\n  \"errors\": [\n    {\n      \"field\": \"field\",\n      \"code\": \"code\",\n      \"message\": \"message\"\n    }\n  ],\n  \"transactionId\": \"26aca817-9a02-4119-bc06-2fcab3666454\",\n  \"processedAt\": \"2024-01-15T09:30:00Z\",\n  \"billable\": true\n}",
         "headers": {
           "Content-Type": "application/json"
         }
       },
       "uuid": "944a5d45-3c02-4ac1-a28d-dd8c2dd453e6",
+      "persistent": true,
+      "priority": 3,
+      "metadata": {
+        "mocklab": {
+          "created": {
+            "at": "2020-01-01T00:00:00.000Z",
+            "via": "SYSTEM"
+          }
+        }
+      }
+    },
+    {
+      "id": "65b9d91c-ddff-46da-a234-b75ba9cc4384",
+      "name": "Employment Status (Async) - Accepted",
+      "request": {
+        "urlPathTemplate": "/mex/social-security/v1/imss-employment-status-async",
+        "method": "POST",
+        "headers": {
+          "x-api-key": {
+            "matches": ".+"
+          }
+        }
+      },
+      "response": {
+        "status": 200,
+        "body": "{\n  \"status\": \"OK\",\n  \"type\": \"ACCEPTED\",\n  \"message\": \"Request accepted, result will be sent to the webhook\",\n  \"errors\": [\n    {\n      \"field\": \"field\",\n      \"code\": \"code\",\n      \"message\": \"message\"\n    }\n  ],\n  \"transactionId\": \"322e6c8b-0124-5c84-95db-4da04842d0da\",\n  \"processedAt\": \"2024-01-15T09:30:00Z\",\n  \"billable\": false\n}",
+        "headers": {
+          "Content-Type": "application/json"
+        }
+      },
+      "uuid": "65b9d91c-ddff-46da-a234-b75ba9cc4384",
+      "persistent": true,
+      "priority": 3,
+      "metadata": {
+        "mocklab": {
+          "created": {
+            "at": "2020-01-01T00:00:00.000Z",
+            "via": "SYSTEM"
+          }
+        }
+      }
+    },
+    {
+      "id": "2b92d0e5-60bc-43cf-ba2c-4a8aac2f6f86",
+      "name": "Contribution Weeks - Accepted",
+      "request": {
+        "urlPathTemplate": "/mex/social-security/v1/imss-contribution-weeks",
+        "method": "POST",
+        "headers": {
+          "x-api-key": {
+            "matches": ".+"
+          }
+        }
+      },
+      "response": {
+        "status": 200,
+        "body": "{\n  \"status\": \"OK\",\n  \"type\": \"ACCEPTED\",\n  \"message\": \"Request accepted, result will be sent to the webhook\",\n  \"errors\": [\n    {\n      \"field\": \"field\",\n      \"code\": \"code\",\n      \"message\": \"message\"\n    }\n  ],\n  \"transactionId\": \"975cf12f-f270-51cc-9037-d710134940c9\",\n  \"processedAt\": \"2024-01-15T09:30:00Z\",\n  \"billable\": false\n}",
+        "headers": {
+          "Content-Type": "application/json"
+        }
+      },
+      "uuid": "2b92d0e5-60bc-43cf-ba2c-4a8aac2f6f86",
+      "persistent": true,
+      "priority": 3,
+      "metadata": {
+        "mocklab": {
+          "created": {
+            "at": "2020-01-01T00:00:00.000Z",
+            "via": "SYSTEM"
+          }
+        }
+      }
+    },
+    {
+      "id": "73db3478-d03c-41af-ab45-51372085a333",
+      "name": "Contribution Weeks Result - Result Found",
+      "request": {
+        "urlPathTemplate": "/mex/social-security/v1/imss-contribution-weeks-results",
+        "method": "POST",
+        "headers": {
+          "x-api-key": {
+            "matches": ".+"
+          }
+        }
+      },
+      "response": {
+        "status": 200,
+        "body": "{\n  \"status\": \"OK\",\n  \"type\": \"RESULT_FOUND\",\n  \"message\": \"Result found\",\n  \"data\": {\n    \"status\": \"OK\",\n    \"type\": \"SUCCESS\",\n    \"message\": \"Active employment found\",\n    \"data\": {\n      \"nss\": \"45028712309\",\n      \"personalInfo\": {\n        \"curp\": \"RATL850312HDFMRS07\",\n        \"givenNames\": \"LUIS ALBERTO\",\n        \"firstSurname\": \"RAMIREZ\",\n        \"secondSurname\": \"TORRES\",\n        \"gender\": \"H\",\n        \"dateOfBirth\": \"1985-03-12\"\n      },\n      \"contributionWeeks\": {\n        \"total\": 612,\n        \"contributed\": 612,\n        \"discounted\": 0,\n        \"reinstated\": 0\n      },\n      \"derivedSignals\": {\n        \"currentStatus\": {\n          \"employed\": true,\n          \"monthsInCurrentStatus\": 60,\n          \"lastDailySalary\": {\n            \"amount\": \"685.50\",\n            \"currency\": \"MXN\"\n          },\n          \"lastMonthlySalary\": {\n            \"amount\": \"20866.62\",\n            \"currency\": \"MXN\"\n          },\n          \"salaryAtLegalCap\": false\n        },\n        \"jobTenure\": {\n          \"currentJobMonths\": 60,\n          \"averageJobMonths\": 42,\n          \"longestJobMonths\": 60,\n          \"shortestJobMonths\": 4.5,\n          \"monthsSinceFirstJob\": 210\n        },\n        \"stability\": {\n          \"employerCount\": 4,\n          \"distinctEmployerCount\": 4,\n          \"monthsPerEmployer\": 52.5,\n          \"jobChanges\": 3,\n          \"jobChangesLast5Years\": 1,\n          \"simultaneousJobsDetected\": 0,\n          \"unemploymentPeriods\": {\n            \"count\": 3,\n            \"totalMonths\": 22,\n            \"longestMonths\": 11.5,\n            \"monthsSinceLastUnemployment\": 60\n          },\n          \"monthsActuallyEmployed\": 188,\n          \"percentOfTimeEmployed\": 89.5\n        },\n        \"salary\": {\n          \"first\": {\n            \"amount\": \"210.00\",\n            \"currency\": \"MXN\"\n          },\n          \"latest\": {\n            \"amount\": \"685.50\",\n            \"currency\": \"MXN\"\n          },\n          \"highest\": {\n            \"amount\": \"685.50\",\n            \"currency\": \"MXN\"\n          },\n          \"lowest\": {\n            \"amount\": \"210.00\",\n            \"currency\": \"MXN\"\n          },\n          \"changePercentFirstToLatest\": 226.4,\n          \"firstMonthly\": {\n            \"amount\": \"6392.40\",\n            \"currency\": \"MXN\"\n          },\n          \"latestMonthly\": {\n            \"amount\": \"20866.62\",\n            \"currency\": \"MXN\"\n          },\n          \"employerChanges\": {\n            \"withRaise\": 3,\n            \"withCut\": 0\n          },\n          \"snapshots\": {\n            \"oneYearAgo\": {\n              \"dailySalary\": {\n                \"amount\": \"685.50\",\n                \"currency\": \"MXN\"\n              },\n              \"monthlySalary\": {\n                \"amount\": \"20866.62\",\n                \"currency\": \"MXN\"\n              },\n              \"changePercentToLatest\": 0\n            },\n            \"threeYearsAgo\": {\n              \"dailySalary\": {\n                \"amount\": \"620.00\",\n                \"currency\": \"MXN\"\n              },\n              \"monthlySalary\": {\n                \"amount\": \"18872.80\",\n                \"currency\": \"MXN\"\n              },\n              \"changePercentToLatest\": 10.6\n            },\n            \"fiveYearsAgo\": {\n              \"dailySalary\": {\n                \"amount\": \"480.00\",\n                \"currency\": \"MXN\"\n              },\n              \"monthlySalary\": {\n                \"amount\": \"14611.20\",\n                \"currency\": \"MXN\"\n              },\n              \"changePercentToLatest\": 42.8\n            }\n          }\n        },\n        \"salaryTimeline\": [\n          {\n            \"event\": \"HIRED\",\n            \"date\": \"2009-02-10\",\n            \"employerName\": \"ABARROTES EL SURTIDOR\",\n            \"dailySalary\": {\n              \"amount\": \"210.00\",\n              \"currency\": \"MXN\"\n            },\n            \"monthlySalary\": {\n              \"amount\": \"6392.40\",\n              \"currency\": \"MXN\"\n            }\n          },\n          {\n            \"event\": \"TERMINATED\",\n            \"date\": \"2009-06-28\",\n            \"employerName\": \"ABARROTES EL SURTIDOR\",\n            \"dailySalary\": {\n              \"amount\": \"210.00\",\n              \"currency\": \"MXN\"\n            },\n            \"monthlySalary\": {\n              \"amount\": \"6392.40\",\n              \"currency\": \"MXN\"\n            }\n          },\n          {\n            \"event\": \"HIRED\",\n            \"date\": \"2021-08-16\",\n            \"employerName\": \"SERVICIOS INTEGRALES DEL NORTE SA DE CV\",\n            \"dailySalary\": {\n              \"amount\": \"685.50\",\n              \"currency\": \"MXN\"\n            },\n            \"monthlySalary\": {\n              \"amount\": \"20866.62\",\n              \"currency\": \"MXN\"\n            }\n          }\n        ]\n      },\n      \"employmentHistory\": [\n        {\n          \"employerName\": \"SERVICIOS INTEGRALES DEL NORTE SA DE CV\",\n          \"employerRegistration\": \"A5512340987\",\n          \"state\": \"CIUDAD DE MÉXICO\",\n          \"startDate\": \"2021-08-16\",\n          \"baseSalary\": {\n            \"amount\": \"685.50\",\n            \"currency\": \"MXN\"\n          }\n        },\n        {\n          \"employerName\": \"DISTRIBUIDORA GAMMA SA DE CV\",\n          \"employerRegistration\": \"B7788990011\",\n          \"state\": \"JALISCO\",\n          \"startDate\": \"2016-05-02\",\n          \"endDate\": \"2021-06-30\",\n          \"baseSalary\": {\n            \"amount\": \"540.00\",\n            \"currency\": \"MXN\"\n          }\n        },\n        {\n          \"employerName\": \"ABARROTES EL SURTIDOR\",\n          \"employerRegistration\": \"C4433221100\",\n          \"state\": \"JALISCO\",\n          \"startDate\": \"2009-02-10\",\n          \"endDate\": \"2009-06-28\",\n          \"baseSalary\": {\n            \"amount\": \"210.00\",\n            \"currency\": \"MXN\"\n          }\n        }\n      ],\n      \"reportDetails\": {\n        \"source\": \"IMSS\",\n        \"documentType\": \"CONSTANCIA DE SEMANAS COTIZADAS\",\n        \"folio\": \"20481135900274651093824\",\n        \"issueDate\": \"2026-08-12\",\n        \"serialNumber\": \"00000000000000004821\",\n        \"notarialSequence\": \"b28f4c19-6a03-41e2-9c15-7dd0a2e51b47\",\n        \"digitalSeal\": \"Qm9ndXNTZWFsRXhhbXBsZURhdGFOb3RSZWFsRm9yRG9jdW1lbnRhdGlvbk9ubHk9PQ==\"\n      },\n      \"files\": [\n        {\n          \"kind\": \"document\",\n          \"contentType\": \"application/pdf\",\n          \"sizeBytes\": 73412,\n          \"content\": \"JVBERi0xLjQKJeLjz9MKMyAwIG9iago8PC9GaWx0ZXIvRmxhdGVEZWNvZGUvTGVuZ3Ro...\"\n        }\n      ]\n    },\n    \"transactionId\": \"975cf12f-f270-51cc-9037-d710134940c9\",\n    \"processedAt\": \"2026-08-13T11:20:00-06:00\",\n    \"billable\": true\n  },\n  \"errors\": [\n    {\n      \"field\": \"field\",\n      \"code\": \"code\",\n      \"message\": \"message\"\n    }\n  ],\n  \"transactionId\": \"c87b960c-1d21-5a39-ac95-c68e05023ee1\",\n  \"processedAt\": \"2024-01-15T09:30:00Z\",\n  \"billable\": false\n}",
+        "headers": {
+          "Content-Type": "application/json"
+        }
+      },
+      "uuid": "73db3478-d03c-41af-ab45-51372085a333",
       "persistent": true,
       "priority": 3,
       "metadata": {
@@ -684,6 +808,6 @@
     }
   ],
   "meta": {
-    "total": 22
+    "total": 26
   }
 }

@@ -103,6 +103,35 @@ func TestSocialSecurityLookupImssNssWithWireMock(
 	VerifyRequestCount(t, "TestSocialSecurityLookupImssNssWithWireMock", "POST", "/mex/social-security/v1/imss-nss-lookups", nil, 1)
 }
 
+func TestSocialSecurityCreateImssNssLookupAsyncWithWireMock(
+	t *testing.T,
+) {
+	WireMockBaseURL := os.Getenv("WIREMOCK_URL")
+	if WireMockBaseURL == "" {
+		WireMockBaseURL = "http://localhost:8080"
+	}
+	client := client.NewClient(
+		option.WithBaseURL(WireMockBaseURL),
+		option.WithAPIKey("test-value"),
+	)
+	request := &sdkgo.CreateImssNssLookupAsyncRequest{
+		Curp: "ALMR900805HDFRZA09",
+		Webhook: &sdkgo.CreateImssNssLookupAsyncRequestWebhook{
+			URL: "https://your-domain.com/hooks/origoid",
+		},
+	}
+	_, invocationErr := client.SocialSecurity.CreateImssNssLookupAsync(
+		context.TODO(),
+		request,
+		option.WithHTTPHeader(
+			http.Header{"X-Test-Id": []string{"TestSocialSecurityCreateImssNssLookupAsyncWithWireMock"}},
+		),
+	)
+
+	require.NoError(t, invocationErr, "Client method call should succeed")
+	VerifyRequestCount(t, "TestSocialSecurityCreateImssNssLookupAsyncWithWireMock", "POST", "/mex/social-security/v1/imss-nss-lookup-async", nil, 1)
+}
+
 func TestSocialSecurityGetImssEmploymentStatusWithWireMock(
 	t *testing.T,
 ) {
@@ -128,6 +157,90 @@ func TestSocialSecurityGetImssEmploymentStatusWithWireMock(
 
 	require.NoError(t, invocationErr, "Client method call should succeed")
 	VerifyRequestCount(t, "TestSocialSecurityGetImssEmploymentStatusWithWireMock", "POST", "/mex/social-security/v1/imss-employment-status", nil, 1)
+}
+
+func TestSocialSecurityCreateImssEmploymentStatusAsyncWithWireMock(
+	t *testing.T,
+) {
+	WireMockBaseURL := os.Getenv("WIREMOCK_URL")
+	if WireMockBaseURL == "" {
+		WireMockBaseURL = "http://localhost:8080"
+	}
+	client := client.NewClient(
+		option.WithBaseURL(WireMockBaseURL),
+		option.WithAPIKey("test-value"),
+	)
+	request := &sdkgo.CreateImssEmploymentStatusAsyncRequest{
+		Curp: "GARM900101HDFRZA01",
+		Webhook: &sdkgo.CreateImssEmploymentStatusAsyncRequestWebhook{
+			URL: "https://your-domain.com/hooks/origoid",
+		},
+	}
+	_, invocationErr := client.SocialSecurity.CreateImssEmploymentStatusAsync(
+		context.TODO(),
+		request,
+		option.WithHTTPHeader(
+			http.Header{"X-Test-Id": []string{"TestSocialSecurityCreateImssEmploymentStatusAsyncWithWireMock"}},
+		),
+	)
+
+	require.NoError(t, invocationErr, "Client method call should succeed")
+	VerifyRequestCount(t, "TestSocialSecurityCreateImssEmploymentStatusAsyncWithWireMock", "POST", "/mex/social-security/v1/imss-employment-status-async", nil, 1)
+}
+
+func TestSocialSecurityCreateImssContributionWeeksWithWireMock(
+	t *testing.T,
+) {
+	WireMockBaseURL := os.Getenv("WIREMOCK_URL")
+	if WireMockBaseURL == "" {
+		WireMockBaseURL = "http://localhost:8080"
+	}
+	client := client.NewClient(
+		option.WithBaseURL(WireMockBaseURL),
+		option.WithAPIKey("test-value"),
+	)
+	request := &sdkgo.CreateImssContributionWeeksRequest{
+		Curp: "RATL850312HDFMRS07",
+		Webhook: &sdkgo.CreateImssContributionWeeksRequestWebhook{
+			URL: "https://your-domain.com/hooks/origoid",
+		},
+	}
+	_, invocationErr := client.SocialSecurity.CreateImssContributionWeeks(
+		context.TODO(),
+		request,
+		option.WithHTTPHeader(
+			http.Header{"X-Test-Id": []string{"TestSocialSecurityCreateImssContributionWeeksWithWireMock"}},
+		),
+	)
+
+	require.NoError(t, invocationErr, "Client method call should succeed")
+	VerifyRequestCount(t, "TestSocialSecurityCreateImssContributionWeeksWithWireMock", "POST", "/mex/social-security/v1/imss-contribution-weeks", nil, 1)
+}
+
+func TestSocialSecurityGetImssContributionWeeksResultWithWireMock(
+	t *testing.T,
+) {
+	WireMockBaseURL := os.Getenv("WIREMOCK_URL")
+	if WireMockBaseURL == "" {
+		WireMockBaseURL = "http://localhost:8080"
+	}
+	client := client.NewClient(
+		option.WithBaseURL(WireMockBaseURL),
+		option.WithAPIKey("test-value"),
+	)
+	request := &sdkgo.GetImssContributionWeeksResultRequest{
+		TransactionID: "975cf12f-f270-51cc-9037-d710134940c9",
+	}
+	_, invocationErr := client.SocialSecurity.GetImssContributionWeeksResult(
+		context.TODO(),
+		request,
+		option.WithHTTPHeader(
+			http.Header{"X-Test-Id": []string{"TestSocialSecurityGetImssContributionWeeksResultWithWireMock"}},
+		),
+	)
+
+	require.NoError(t, invocationErr, "Client method call should succeed")
+	VerifyRequestCount(t, "TestSocialSecurityGetImssContributionWeeksResultWithWireMock", "POST", "/mex/social-security/v1/imss-contribution-weeks-results", nil, 1)
 }
 
 func TestSocialSecurityGetIssteRecordWithWireMock(

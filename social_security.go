@@ -11,13 +11,254 @@ import (
 )
 
 var (
-	getImssEmploymentStatusRequestFieldCurp = big.NewInt(1 << 0)
-	getImssEmploymentStatusRequestFieldNss  = big.NewInt(1 << 1)
+	createImssContributionWeeksRequestFieldCurp    = big.NewInt(1 << 0)
+	createImssContributionWeeksRequestFieldWebhook = big.NewInt(1 << 1)
+)
+
+type CreateImssContributionWeeksRequest struct {
+	// 18-character CURP.
+	Curp string `json:"curp" url:"-"`
+	// Where the result of an asynchronous request is delivered (HTTP POST with a JSON body).
+	Webhook *CreateImssContributionWeeksRequestWebhook `json:"webhook" url:"-"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
+}
+
+func (c *CreateImssContributionWeeksRequest) require(field *big.Int) {
+	if c.explicitFields == nil {
+		c.explicitFields = big.NewInt(0)
+	}
+	c.explicitFields.Or(c.explicitFields, field)
+}
+
+// SetCurp sets the Curp field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CreateImssContributionWeeksRequest) SetCurp(curp string) {
+	c.Curp = curp
+	c.require(createImssContributionWeeksRequestFieldCurp)
+}
+
+// SetWebhook sets the Webhook field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CreateImssContributionWeeksRequest) SetWebhook(webhook *CreateImssContributionWeeksRequestWebhook) {
+	c.Webhook = webhook
+	c.require(createImssContributionWeeksRequestFieldWebhook)
+}
+
+func (c *CreateImssContributionWeeksRequest) UnmarshalJSON(data []byte) error {
+	type unmarshaler CreateImssContributionWeeksRequest
+	var body unmarshaler
+	if err := json.Unmarshal(data, &body); err != nil {
+		return err
+	}
+	*c = CreateImssContributionWeeksRequest(body)
+	return nil
+}
+
+func (c *CreateImssContributionWeeksRequest) MarshalJSON() ([]byte, error) {
+	type embed CreateImssContributionWeeksRequest
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*c),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, c.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
+var (
+	createImssEmploymentStatusAsyncRequestFieldCurp       = big.NewInt(1 << 0)
+	createImssEmploymentStatusAsyncRequestFieldNss        = big.NewInt(1 << 1)
+	createImssEmploymentStatusAsyncRequestFieldIncludePdf = big.NewInt(1 << 2)
+	createImssEmploymentStatusAsyncRequestFieldWebhook    = big.NewInt(1 << 3)
+)
+
+type CreateImssEmploymentStatusAsyncRequest struct {
+	// 18-character CURP.
+	Curp string `json:"curp" url:"-"`
+	// Optional 11-digit NSS, checked against the NSS registered for the CURP.
+	Nss *string `json:"nss,omitempty" url:"-"`
+	// Also return the official IMSS report as a PDF in `data.files[]`. No extra credits.
+	IncludePdf *bool `json:"includePdf,omitempty" url:"-"`
+	// Where the result of an asynchronous request is delivered (HTTP POST with a JSON body).
+	Webhook *CreateImssEmploymentStatusAsyncRequestWebhook `json:"webhook" url:"-"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
+}
+
+func (c *CreateImssEmploymentStatusAsyncRequest) require(field *big.Int) {
+	if c.explicitFields == nil {
+		c.explicitFields = big.NewInt(0)
+	}
+	c.explicitFields.Or(c.explicitFields, field)
+}
+
+// SetCurp sets the Curp field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CreateImssEmploymentStatusAsyncRequest) SetCurp(curp string) {
+	c.Curp = curp
+	c.require(createImssEmploymentStatusAsyncRequestFieldCurp)
+}
+
+// SetNss sets the Nss field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CreateImssEmploymentStatusAsyncRequest) SetNss(nss *string) {
+	c.Nss = nss
+	c.require(createImssEmploymentStatusAsyncRequestFieldNss)
+}
+
+// SetIncludePdf sets the IncludePdf field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CreateImssEmploymentStatusAsyncRequest) SetIncludePdf(includePdf *bool) {
+	c.IncludePdf = includePdf
+	c.require(createImssEmploymentStatusAsyncRequestFieldIncludePdf)
+}
+
+// SetWebhook sets the Webhook field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CreateImssEmploymentStatusAsyncRequest) SetWebhook(webhook *CreateImssEmploymentStatusAsyncRequestWebhook) {
+	c.Webhook = webhook
+	c.require(createImssEmploymentStatusAsyncRequestFieldWebhook)
+}
+
+func (c *CreateImssEmploymentStatusAsyncRequest) UnmarshalJSON(data []byte) error {
+	type unmarshaler CreateImssEmploymentStatusAsyncRequest
+	var body unmarshaler
+	if err := json.Unmarshal(data, &body); err != nil {
+		return err
+	}
+	*c = CreateImssEmploymentStatusAsyncRequest(body)
+	return nil
+}
+
+func (c *CreateImssEmploymentStatusAsyncRequest) MarshalJSON() ([]byte, error) {
+	type embed CreateImssEmploymentStatusAsyncRequest
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*c),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, c.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
+var (
+	createImssNssLookupAsyncRequestFieldCurp    = big.NewInt(1 << 0)
+	createImssNssLookupAsyncRequestFieldWebhook = big.NewInt(1 << 1)
+)
+
+type CreateImssNssLookupAsyncRequest struct {
+	// 18-character CURP.
+	Curp string `json:"curp" url:"-"`
+	// Where the result of an asynchronous request is delivered (HTTP POST with a JSON body).
+	Webhook *CreateImssNssLookupAsyncRequestWebhook `json:"webhook" url:"-"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
+}
+
+func (c *CreateImssNssLookupAsyncRequest) require(field *big.Int) {
+	if c.explicitFields == nil {
+		c.explicitFields = big.NewInt(0)
+	}
+	c.explicitFields.Or(c.explicitFields, field)
+}
+
+// SetCurp sets the Curp field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CreateImssNssLookupAsyncRequest) SetCurp(curp string) {
+	c.Curp = curp
+	c.require(createImssNssLookupAsyncRequestFieldCurp)
+}
+
+// SetWebhook sets the Webhook field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CreateImssNssLookupAsyncRequest) SetWebhook(webhook *CreateImssNssLookupAsyncRequestWebhook) {
+	c.Webhook = webhook
+	c.require(createImssNssLookupAsyncRequestFieldWebhook)
+}
+
+func (c *CreateImssNssLookupAsyncRequest) UnmarshalJSON(data []byte) error {
+	type unmarshaler CreateImssNssLookupAsyncRequest
+	var body unmarshaler
+	if err := json.Unmarshal(data, &body); err != nil {
+		return err
+	}
+	*c = CreateImssNssLookupAsyncRequest(body)
+	return nil
+}
+
+func (c *CreateImssNssLookupAsyncRequest) MarshalJSON() ([]byte, error) {
+	type embed CreateImssNssLookupAsyncRequest
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*c),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, c.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
+var (
+	getImssContributionWeeksResultRequestFieldTransactionID = big.NewInt(1 << 0)
+)
+
+type GetImssContributionWeeksResultRequest struct {
+	// The `transactionId` returned by Contribution Weeks.
+	TransactionID string `json:"transactionId" url:"-"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
+}
+
+func (g *GetImssContributionWeeksResultRequest) require(field *big.Int) {
+	if g.explicitFields == nil {
+		g.explicitFields = big.NewInt(0)
+	}
+	g.explicitFields.Or(g.explicitFields, field)
+}
+
+// SetTransactionID sets the TransactionID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (g *GetImssContributionWeeksResultRequest) SetTransactionID(transactionID string) {
+	g.TransactionID = transactionID
+	g.require(getImssContributionWeeksResultRequestFieldTransactionID)
+}
+
+func (g *GetImssContributionWeeksResultRequest) UnmarshalJSON(data []byte) error {
+	type unmarshaler GetImssContributionWeeksResultRequest
+	var body unmarshaler
+	if err := json.Unmarshal(data, &body); err != nil {
+		return err
+	}
+	*g = GetImssContributionWeeksResultRequest(body)
+	return nil
+}
+
+func (g *GetImssContributionWeeksResultRequest) MarshalJSON() ([]byte, error) {
+	type embed GetImssContributionWeeksResultRequest
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*g),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, g.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
+var (
+	getImssEmploymentStatusRequestFieldCurp       = big.NewInt(1 << 0)
+	getImssEmploymentStatusRequestFieldNss        = big.NewInt(1 << 1)
+	getImssEmploymentStatusRequestFieldIncludePdf = big.NewInt(1 << 2)
 )
 
 type GetImssEmploymentStatusRequest struct {
 	Curp string `json:"curp" url:"-"`
 	Nss  string `json:"nss" url:"-"`
+	// Also return the official IMSS report as a PDF in `data.files[]`. No extra credits.
+	IncludePdf *bool `json:"includePdf,omitempty" url:"-"`
 
 	// Private bitmask of fields set to an explicit value and therefore not to be omitted
 	explicitFields *big.Int `json:"-" url:"-"`
@@ -42,6 +283,13 @@ func (g *GetImssEmploymentStatusRequest) SetCurp(curp string) {
 func (g *GetImssEmploymentStatusRequest) SetNss(nss string) {
 	g.Nss = nss
 	g.require(getImssEmploymentStatusRequestFieldNss)
+}
+
+// SetIncludePdf sets the IncludePdf field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (g *GetImssEmploymentStatusRequest) SetIncludePdf(includePdf *bool) {
+	g.IncludePdf = includePdf
+	g.require(getImssEmploymentStatusRequestFieldIncludePdf)
 }
 
 func (g *GetImssEmploymentStatusRequest) UnmarshalJSON(data []byte) error {
@@ -2493,6 +2741,315 @@ func NewIssteRecordDataPersonalInfoMaritalStatusFromString(s string) (IssteRecor
 
 func (i IssteRecordDataPersonalInfoMaritalStatus) Ptr() *IssteRecordDataPersonalInfoMaritalStatus {
 	return &i
+}
+
+// Where the result of an asynchronous request is delivered (HTTP POST with a JSON body).
+var (
+	createImssContributionWeeksRequestWebhookFieldURL     = big.NewInt(1 << 0)
+	createImssContributionWeeksRequestWebhookFieldHeaders = big.NewInt(1 << 1)
+)
+
+type CreateImssContributionWeeksRequestWebhook struct {
+	// Public http or https URL that receives the result.
+	URL string `json:"url" url:"url"`
+	// Optional header names and values added to the webhook request (e.g. your own authorization token).
+	Headers map[string]string `json:"headers,omitempty" url:"headers,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (c *CreateImssContributionWeeksRequestWebhook) GetURL() string {
+	if c == nil {
+		return ""
+	}
+	return c.URL
+}
+
+func (c *CreateImssContributionWeeksRequestWebhook) GetHeaders() map[string]string {
+	if c == nil {
+		return nil
+	}
+	return c.Headers
+}
+
+func (c *CreateImssContributionWeeksRequestWebhook) GetExtraProperties() map[string]interface{} {
+	if c == nil {
+		return nil
+	}
+	return c.extraProperties
+}
+
+func (c *CreateImssContributionWeeksRequestWebhook) require(field *big.Int) {
+	if c.explicitFields == nil {
+		c.explicitFields = big.NewInt(0)
+	}
+	c.explicitFields.Or(c.explicitFields, field)
+}
+
+// SetURL sets the URL field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CreateImssContributionWeeksRequestWebhook) SetURL(url string) {
+	c.URL = url
+	c.require(createImssContributionWeeksRequestWebhookFieldURL)
+}
+
+// SetHeaders sets the Headers field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CreateImssContributionWeeksRequestWebhook) SetHeaders(headers map[string]string) {
+	c.Headers = headers
+	c.require(createImssContributionWeeksRequestWebhookFieldHeaders)
+}
+
+func (c *CreateImssContributionWeeksRequestWebhook) UnmarshalJSON(data []byte) error {
+	type unmarshaler CreateImssContributionWeeksRequestWebhook
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*c = CreateImssContributionWeeksRequestWebhook(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *c)
+	if err != nil {
+		return err
+	}
+	c.extraProperties = extraProperties
+	c.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (c *CreateImssContributionWeeksRequestWebhook) MarshalJSON() ([]byte, error) {
+	type embed CreateImssContributionWeeksRequestWebhook
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*c),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, c.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
+func (c *CreateImssContributionWeeksRequestWebhook) String() string {
+	if c == nil {
+		return "<nil>"
+	}
+	if len(c.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(c.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(c); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", c)
+}
+
+// Where the result of an asynchronous request is delivered (HTTP POST with a JSON body).
+var (
+	createImssEmploymentStatusAsyncRequestWebhookFieldURL     = big.NewInt(1 << 0)
+	createImssEmploymentStatusAsyncRequestWebhookFieldHeaders = big.NewInt(1 << 1)
+)
+
+type CreateImssEmploymentStatusAsyncRequestWebhook struct {
+	// Public http or https URL that receives the result.
+	URL string `json:"url" url:"url"`
+	// Optional header names and values added to the webhook request (e.g. your own authorization token).
+	Headers map[string]string `json:"headers,omitempty" url:"headers,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (c *CreateImssEmploymentStatusAsyncRequestWebhook) GetURL() string {
+	if c == nil {
+		return ""
+	}
+	return c.URL
+}
+
+func (c *CreateImssEmploymentStatusAsyncRequestWebhook) GetHeaders() map[string]string {
+	if c == nil {
+		return nil
+	}
+	return c.Headers
+}
+
+func (c *CreateImssEmploymentStatusAsyncRequestWebhook) GetExtraProperties() map[string]interface{} {
+	if c == nil {
+		return nil
+	}
+	return c.extraProperties
+}
+
+func (c *CreateImssEmploymentStatusAsyncRequestWebhook) require(field *big.Int) {
+	if c.explicitFields == nil {
+		c.explicitFields = big.NewInt(0)
+	}
+	c.explicitFields.Or(c.explicitFields, field)
+}
+
+// SetURL sets the URL field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CreateImssEmploymentStatusAsyncRequestWebhook) SetURL(url string) {
+	c.URL = url
+	c.require(createImssEmploymentStatusAsyncRequestWebhookFieldURL)
+}
+
+// SetHeaders sets the Headers field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CreateImssEmploymentStatusAsyncRequestWebhook) SetHeaders(headers map[string]string) {
+	c.Headers = headers
+	c.require(createImssEmploymentStatusAsyncRequestWebhookFieldHeaders)
+}
+
+func (c *CreateImssEmploymentStatusAsyncRequestWebhook) UnmarshalJSON(data []byte) error {
+	type unmarshaler CreateImssEmploymentStatusAsyncRequestWebhook
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*c = CreateImssEmploymentStatusAsyncRequestWebhook(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *c)
+	if err != nil {
+		return err
+	}
+	c.extraProperties = extraProperties
+	c.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (c *CreateImssEmploymentStatusAsyncRequestWebhook) MarshalJSON() ([]byte, error) {
+	type embed CreateImssEmploymentStatusAsyncRequestWebhook
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*c),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, c.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
+func (c *CreateImssEmploymentStatusAsyncRequestWebhook) String() string {
+	if c == nil {
+		return "<nil>"
+	}
+	if len(c.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(c.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(c); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", c)
+}
+
+// Where the result of an asynchronous request is delivered (HTTP POST with a JSON body).
+var (
+	createImssNssLookupAsyncRequestWebhookFieldURL     = big.NewInt(1 << 0)
+	createImssNssLookupAsyncRequestWebhookFieldHeaders = big.NewInt(1 << 1)
+)
+
+type CreateImssNssLookupAsyncRequestWebhook struct {
+	// Public http or https URL that receives the result.
+	URL string `json:"url" url:"url"`
+	// Optional header names and values added to the webhook request (e.g. your own authorization token).
+	Headers map[string]string `json:"headers,omitempty" url:"headers,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (c *CreateImssNssLookupAsyncRequestWebhook) GetURL() string {
+	if c == nil {
+		return ""
+	}
+	return c.URL
+}
+
+func (c *CreateImssNssLookupAsyncRequestWebhook) GetHeaders() map[string]string {
+	if c == nil {
+		return nil
+	}
+	return c.Headers
+}
+
+func (c *CreateImssNssLookupAsyncRequestWebhook) GetExtraProperties() map[string]interface{} {
+	if c == nil {
+		return nil
+	}
+	return c.extraProperties
+}
+
+func (c *CreateImssNssLookupAsyncRequestWebhook) require(field *big.Int) {
+	if c.explicitFields == nil {
+		c.explicitFields = big.NewInt(0)
+	}
+	c.explicitFields.Or(c.explicitFields, field)
+}
+
+// SetURL sets the URL field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CreateImssNssLookupAsyncRequestWebhook) SetURL(url string) {
+	c.URL = url
+	c.require(createImssNssLookupAsyncRequestWebhookFieldURL)
+}
+
+// SetHeaders sets the Headers field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CreateImssNssLookupAsyncRequestWebhook) SetHeaders(headers map[string]string) {
+	c.Headers = headers
+	c.require(createImssNssLookupAsyncRequestWebhookFieldHeaders)
+}
+
+func (c *CreateImssNssLookupAsyncRequestWebhook) UnmarshalJSON(data []byte) error {
+	type unmarshaler CreateImssNssLookupAsyncRequestWebhook
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*c = CreateImssNssLookupAsyncRequestWebhook(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *c)
+	if err != nil {
+		return err
+	}
+	c.extraProperties = extraProperties
+	c.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (c *CreateImssNssLookupAsyncRequestWebhook) MarshalJSON() ([]byte, error) {
+	type embed CreateImssNssLookupAsyncRequestWebhook
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*c),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, c.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
+func (c *CreateImssNssLookupAsyncRequestWebhook) String() string {
+	if c == nil {
+		return "<nil>"
+	}
+	if len(c.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(c.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(c); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", c)
 }
 
 var (
