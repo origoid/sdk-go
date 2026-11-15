@@ -8,9 +8,9 @@
     },
     "retryStatusCodes": "legacy"
   },
-  "originGitCommit": "98dc017c5826604d76437a23cf3692d2341f2665",
+  "originGitCommit": "0ddcb8fc2300091dc7ba517ec055def2bdf6acc7",
   "originGitCommitIsDirty": false,
   "invokedBy": "manual",
-  "requestedVersion": "0.6.0",
-  "sdkVersion": "v0.6.0"
+  "requestedVersion": "0.6.1",
+  "sdkVersion": "v0.6.1"
 }
